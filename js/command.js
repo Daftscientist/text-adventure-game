@@ -39,3 +39,11 @@ class Command {
         return true;
     }
 }
+
+// new Command("help", "Displays the help menu", () => {
+//     // Display the help menu
+//     console.log("Help menu");
+// });
+
+// Export the Command object
+export default Command;
