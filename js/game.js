@@ -1,6 +1,6 @@
-import Parser from "./parser";
-import Command from "./command";
-import { Room, Exit } from "./room";
+import Parser from "./parser.js";
+import Command from "./command.js";
+import { Room, Exit } from "./room.js";
 
 function Game() {
     // Setup rooms
@@ -23,7 +23,7 @@ function Game() {
     // Add commands
 
     parser.addCommand(new Command(["look"], "Look around the room", () => {
-        console.log(currentRoom.description);
+        return currentRoom.description;
     }));
 
     parser.addCommand(new Command(["go", "north"], "Go to the room to the north", () => {
@@ -31,9 +31,9 @@ function Game() {
 
         if (exit) {
             currentRoom = rooms.find((room) => room.name === exit.description);
-            console.log("You go north.");
+            return "You go north.";
         } else {
-            console.log("There is no exit to the north.");
+            return "There is no exit to the north.";
         }
     }));
 
@@ -42,9 +42,9 @@ function Game() {
 
         if (exit) {
             currentRoom = rooms.find((room) => room.name === exit.description);
-            console.log("You go south.");
+            return "You go south.";
         } else {
-            console.log("There is no exit to the south.");
+            return "There is no exit to the south.";
         }
     }));
 

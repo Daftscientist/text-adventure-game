@@ -15,7 +15,7 @@ class Command {
 
     matchToInput(input) {
         // Check if the input matches the command
-        if (!input.isArray()) {
+        if (!Array.isArray(input)) {
             throw new Error("Input must be an array of strings");
         }
 

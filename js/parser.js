@@ -1,5 +1,5 @@
 // Description: This file contains the parser class.
-import Command from "./command";
+import Command from "./command.js";
 
 class Parser {
     constructor() {
@@ -39,6 +39,7 @@ class Parser {
 
     // Parse the input and match it to a command
     parseAndMatch(input) {
+        console.log(input)
         // Parse the input
         input = this.parse(input);
 
