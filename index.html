@@ -5,14 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Mysterious Mall - Text Adventure</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url('https://images.pexels.com/photos/2208967/pexels-photo-2208967.jpeg?cs=srgb&dl=pexels-paul-basel-903490-2208967.jpg&fm=jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .shadow-mysterious {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        .text-glow {
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
+        .bg-blur {
+            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .btn-blend {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-blend:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 1);
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
-    <div class="w-full max-w-4xl p-6 bg-gray-800 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4">The Mysterious Mall</h1>
-        <div id="game-output" class="mb-4 p-4 bg-gray-700 rounded h-64 overflow-y-auto">
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-4xl h-full max-h-screen p-6 bg-blur rounded-lg shadow-mysterious">
+        <h1 class="text-3xl font-bold mb-6 text-center text-glow">The Mysterious Mall</h1>
+        <div id="game-output" class="mb-4 p-4 bg-gray-700 bg-blur rounded h-96 overflow-y-auto shadow-mysterious">
         </div>
-        <input id="game-input" type="text" class="w-full p-2 bg-gray-700 rounded mb-2" placeholder="Enter your command...">
-        <button id="submit-btn" class="w-full p-2 bg-blue-500 rounded hover:bg-blue-600">Submit</button>
+        <input id="game-input" type="text" class="w-full p-3 bg-gray-700 bg-blur rounded mb-4 shadow-mysterious" placeholder="Enter your command...">
+        <button id="submit-btn" class="w-full p-3 rounded shadow-mysterious btn-blend">Submit</button>
     </div>
     <script src="entry.js" type="module"></script>
 </body>
