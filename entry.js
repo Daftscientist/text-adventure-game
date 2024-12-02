@@ -1,7 +1,9 @@
 import Game from "./js/game.js";
 
 // Start the game
-let Parser, currentRoom = Game();
+let gameres = Game();
+let Parser = gameres[0];
+let currentRoom = gameres[1];
 
 // Get references to the DOM elements
 const gameOutput = document.getElementById('game-output');
