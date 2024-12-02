@@ -34,10 +34,37 @@ function Game() {
             The silence feels heavy, almost oppressive, as if the room itself is holding its breath, waiting for something to happen. 
         `
     );
+    room1.addExit(new Exit("South", "Room 5"));
+    room1.addExit(new Exit("East", "Room 2"));
+    room1.addItem(new Item("crowbar", "A crowbar lies on the floor, its metal surface cold and slightly rusted. It looks like it could be useful for prying open something.", () => {
+        return "You pick up the crowbar.";
+    }));
 
+    const room2 = new Room("Room 2",
+        `
+            The security room is a high-stakes, covert operations hub designed to monitor and protect the elevator shaft that leads to the top of an unfinished mall. The room is filled with high-tech surveillance equipment, flickering monitors, and a maze of wires and cables running along the walls and floor.
+            The air is tense, charged with the urgency of preventing any unwanted interference or police intervention. The personnel here move with precision and purpose, their eyes constantly scanning the screens for any signs of trouble.
+            The room serves as a focal point for surveillance, access control, and rapid response. The hum of electronic devices and the occasional crackle of a radio transmission are the only sounds that break the heavy silence.
+            The atmosphere is one of constant vigilance, as the team works to maintain surveillance on the illicit activities taking place inside the unfinished mall. The sense of unease is palpable, as they know that any mistake could lead to detection and a swift response from law enforcement.
+            This high-tech, strategic hub is designed to protect the elevator system that connects the different levels of this criminal enterprise, ensuring that the illicit operations continue without interruption.
+            It seems that the security measures are particularly focused on protecting the elevator, which is a crucial link in the operation.
+        `
+    );
+    room2.addExit(new Exit("West", "Room 1"));
+    room2.addExit(new Exit("South", "Room 6"));
 
-    const room2 = new Room("Room 2", "security room, if room (9) alarm isn’t disarmed security kills the character, but if disarmed security let the character go");
-    const room3 = new Room("Room 3", "lift key locked, or open with crowbar");
+    const room3 = new Room("Room 3",
+        `
+            You find yourself outside the same eerie mall, but from a different angle. The skeletal structure of the building looms even more ominously here, with steel beams jutting out at odd angles, casting long, twisted shadows on the ground.
+            The boarded-up windows are just as haphazardly covered, but from this side, you can see where some of the boards have started to come loose, revealing dark, empty spaces behind them.
+            The air is thick with the smell of decay and something metallic, almost like rust. The ground is littered with debris—broken glass, scraps of metal, and pieces of wood.
+            Among the rubble, you spot a hammer lying on the ground. It looks old and worn, but still sturdy. It might come in handy later.
+            Right ahead of you is a lift. The lift's exterior is a patchwork of rusted metal panels and peeling paint, with exposed wiring hanging loosely. The shaft is dimly lit, casting long shadows across the unfinished building. Graffiti and faded warning signs mark the walls, while the faint scent of oil and damp concrete fills the air. The lift ascends slowly, creaking with every movement, as if reluctant to carry you higher into the shadowed, hidden world above.
+        `
+    );
+    // end of game once you go into lift here
+    room3.addExit(new Exit("south", "Room 7"));
+    room3.addExit(new Exit("west", "Room 2"));
 
 
     const room4 = new Room("Room 4",
@@ -57,8 +84,43 @@ function Game() {
     room4.addExit(new Exit("north", "Outside 0"));
 
 
-    const room5 = new Room("Room 5", "Corridor");
-    const room6 = new Room("Room 6", "key for lift");
+    const room5 = new Room("Room 5",
+        `
+            The corridor is dark and narrow, a long stretch of blackness that seems to swallow any hint of light.
+            The air is thick with stillness, and the faintest breath feels heavy in the silence.
+            The only sound is the soft, distant echo of footsteps—if you move, they’re amplified, bouncing off the walls, but otherwise, there is nothing.
+            No hum of electricity, no whisper of wind, just the oppressive quiet.
+        `
+    );
+    room5.addExit(new Exit("north", "Room 1"));
+    room5.addExit(new Exit("south", "Room 9"));
+    room5.addExit(new Exit("east", "Room 6"));
+
+    const room6 = new Room("Room 6",
+        `
+            The room is small and unremarkable, with bare concrete walls and a single flickering light bulb hanging from the ceiling. The air is stale, carrying the faint scent of dust and old paper.
+            In the center of the room, there is a small table, its surface cluttered with various tools and scraps of metal. The walls are lined with shelves holding old, rusted equipment and forgotten supplies.
+            The atmosphere is one of neglect and abandonment, as if this place has not seen much use in a long time. The silence is heavy, broken only by the occasional drip of water from a leaky pipe somewhere in the distance.
+            Despite its disuse, the room feels like it holds secrets, remnants of past activities that were once important but are now long forgotten.
+        `
+    );
+    room6.addExit(new Exit("west", "Room 5"));
+    room6.addExit(new Exit("north", "Room 2"));
+    room6.addExit(new Exit("east", "Room 7"));
+    room6.addExit(new Exit("south", "Room 10"));
+    room6.addItem(new Item("key", `
+        There rests a key.
+        It's an old-fashioned brass key, worn smooth from use, but still distinctly functional. 
+        Its shape is simple, unassuming—a single, heavy object that holds great potential. The key is tied to a purposeful lock—one that secures the elevator shaft leading to the top floors of the incomplete mall, where drug dealing is taking place. 
+        The key doesn’t belong to any regular access point; it’s a tool of control, the kind that grants entry to places hidden from plain sight, places where dark business is conducted far from the law. 
+        The key’s presence in the room feels deliberate, as though it was placed there for someone who understands its significance—someone who is meant to use it. Its surface gleams dully in the intermittent light, and a strange sense of urgency fills the air around it.
+        To hold the key is to hold the means of access, the only thing standing between the outside world and the criminal operations above. 
+        `, () => {
+        return "You pick up the key.";
+    }));
+
+
+
     const room7 = new Room("Room 7", "kills security, so that the corridor to the lift is open");
     const room8 = new Room("Room 8", "Outside window boarded up");
     const room9 = new Room("Room 9", "Inside on enter alarm going off enter code to disarm – if not they die – Hint on death look for code outside");
@@ -80,10 +142,10 @@ function Game() {
         return currentRoom.getDescription();
     }));
 
-    parser.addCommand(new Command(["help"], "Look around the room", () => {
+    parser.addCommand(new Command(["help"], "Look around the room", (command) => {
         // Get a list of all the commands
         const commands = parser.commands.map((command) => command.identifier.join(', ')).join(', ');
-        return `Available commands: ${commands}\nType 'help' followed by a command to get more information about it.`;        
+        return `Available commands: ${commands}`;        
     }));
 
     parser.addCommand(new Command(["exits"], "List the rooms exits", () => {
@@ -107,7 +169,7 @@ function Game() {
 
     parser.addCommand(new Command(["inventory"], "Check your inventory", () => {
         if (inventory.length > 0) {
-            return `Inventory: ${inventory.map((item) => item.name).join(', ')}`;
+            return `Inventory:\n ${inventory.map((item) => `- ${item.name}`).join('\n')}`;
         } else {
             return "Your inventory is empty.";
         }
