@@ -1,10 +1,10 @@
 // Class that stores the item data
 
 class Item {
-    constructor(name, description, use) {
+    constructor(name, description, onTake) {
         this.name = name;
         this.description = description;
-        this.use = use;
+        this.onTake = onTake;
         this.usageLocations = [];
     }
 

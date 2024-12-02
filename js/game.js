@@ -81,7 +81,11 @@ function Game() {
     }));
 
     parser.addCommand(new Command(["help"], "Look around the room", () => {
-        return 'help';
+        return "Available commands: look, exits, go [north, south, east, west], inventory, take [item]";        
+    }));
+
+    parser.addCommand(new Command(["exits"], "List the rooms exits", () => {
+        return currentRoom.exits.map((exit) => exit.direction).join(', ');
     }));
 
     parser.addCommand(new Command(["go", "north"], "Go to the room to the north", () => {
@@ -137,7 +141,14 @@ function Game() {
     }));
 
     parser.addCommand(new Command(["take"], "Take requested item.",  (secondWord) => {
-        // make the second word work
+        const item = currentRoom.hasItem(secondWord.toLowerCase());
+        if (item) {
+            inventory.push(item);
+            currentRoom.removeItem(item);
+            return item.onTake();
+        } else {
+            return "There is no such item in the room.";
+        }
     }, true));
 
     // Start the game

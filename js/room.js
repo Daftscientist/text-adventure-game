@@ -35,7 +35,8 @@ class Room {
     }
 
     hasItem(itemName) {
-        return this.items.some((item) => item.name === itemName);
+        const item = this.items.find((item) => item.name === itemName);
+        return item ? item : false;
     }
 }
 

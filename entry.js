@@ -45,7 +45,13 @@ submitBtn.addEventListener('click', () => {
         }
 
         // Execute the command and get the result
-        let result = command.callback(userInput);
+        if (command.isTwoWordCommand) {
+            let input = Parser.parse(userInput);
+            let secondWord = input[1];
+            var result = command.callback(secondWord);
+        } else {
+            var result = command.callback();
+        }
 
         // Append the result to the game output
         appendMessage(`<b>SYSTEM:</b> ${result}`);

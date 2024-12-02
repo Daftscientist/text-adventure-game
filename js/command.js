@@ -23,8 +23,12 @@ class Command {
         // Convert input to lowercase
         input = input.map((str) => str.toLowerCase());
 
+        // If it's a two-word command, only match the first part
+        if (this.isTwoWordCommand) {
+            return input[0] === this.identifier[0];
+        }
+
         // Check if the input length is the same as the identifier length
-        // Do this before the looping comparison to avoid unnecessary iterations and blocking of the thread
         if (input.length !== this.identifier.length) {
             return false;
         }
@@ -32,7 +36,7 @@ class Command {
         // Compare the input to the identifier
         for (let i = 0; i < input.length; i++) {
             if (input[i] !== this.identifier[i]) {
-                return false;
+            return false;
             }
         }
 

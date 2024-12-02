@@ -39,10 +39,6 @@ class Parser {
     // Parse the input and match it to a command
     parseAndMatch(input) {
 
-
-        // deal with two word command matching. arg on class
-
-
         // Parse the input
         input = this.parse(input);
 
