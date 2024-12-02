@@ -50,7 +50,7 @@ function Game() {
             You can't shake the feeling that you're being watched, but there's no one in sight. The sense of unease is palpable, making you question whether you should proceed or turn back.
         `
     );
-    room4.addItem(new Item("hammer", "An old and worn hammer", () => {
+    room4.addItem(new Item("hammer", "An old and worn hammer lies still on the floor.", () => {
         return "You pick up the hammer.";
     }));
     room4.addExit(new Exit("south", "Room 8"));
@@ -77,60 +77,33 @@ function Game() {
     // Add commands
 
     parser.addCommand(new Command(["look"], "Look around the room", () => {
-        return currentRoom.description;
+        return currentRoom.getDescription();
     }));
 
     parser.addCommand(new Command(["help"], "Look around the room", () => {
-        return "Available commands: look, exits, go [north, south, east, west], inventory, take [item]";        
+        // Get a list of all the commands
+        const commands = parser.commands.map((command) => command.identifier.join(', ')).join(', ');
+        return `Available commands: ${commands}\nType 'help' followed by a command to get more information about it.`;        
     }));
 
     parser.addCommand(new Command(["exits"], "List the rooms exits", () => {
         return currentRoom.exits.map((exit) => exit.direction).join(', ');
     }));
 
-    parser.addCommand(new Command(["go", "north"], "Go to the room to the north", () => {
-        const exit = currentRoom.getExit("north");
+    parser.addCommand(new Command(["go"], "Go in the spesified direction.",  (secondWord) => {
+        const exit = currentRoom.getExit(secondWord.toLowerCase());
+
+        if (!secondWord.toLowerCase() in ["north", "south", "east", "west"]) {
+            return "Invalid direction.";
+        }
 
         if (exit) {
             currentRoom = rooms.find((room) => room.name === exit.description);
-            return "You go north.";
+            return `You go ${secondWord.toLowerCase()}.`;
         } else {
-            return "There is no exit to the north.";
+            return `There is no exit to the ${secondWord.toLowerCase()}.`;
         }
-    }));
-
-    parser.addCommand(new Command(["go", "south"], "Go to the room to the south", () => {
-        const exit = currentRoom.getExit("south");
-
-        if (exit) {
-            currentRoom = rooms.find((room) => room.name === exit.description);
-            return "You go south.";
-        } else {
-            return "There is no exit to the south.";
-        }
-    }));
-
-    parser.addCommand(new Command(["go", "east"], "Go to the room to the east", () => {
-        const exit = currentRoom.getExit("east");
-
-        if (exit) {
-            currentRoom = rooms.find((room) => room.name === exit.description);
-            return "You go east.";
-        } else {
-            return "There is no exit to the east.";
-        }
-    }));
-
-    parser.addCommand(new Command(["go", "west"], "Go to the room to the west", () => {
-        const exit = currentRoom.getExit("west");
-
-        if (exit) {
-            currentRoom = rooms.find((room) => room.name === exit.description);
-            return "You go west.";
-        } else {
-            return "There is no exit to the west.";
-        }
-    }));
+    }, true));
 
     parser.addCommand(new Command(["inventory"], "Check your inventory", () => {
         if (inventory.length > 0) {
@@ -148,6 +121,17 @@ function Game() {
             return item.onTake();
         } else {
             return "There is no such item in the room.";
+        }
+    }, true));
+
+    parser.addCommand(new Command(["drop"], "Drop requested item.",  (secondWord) => {
+        const item = inventory.find((item) => item.name === secondWord.toLowerCase());
+        if (item) {
+            inventory.splice(inventory.indexOf(item), 1);
+            currentRoom.addItem(item);
+            return item.onDrop();
+        } else {
+            return "You don't have such an item in your inventory.";
         }
     }, true));
 

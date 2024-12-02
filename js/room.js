@@ -19,6 +19,14 @@ class Room {
         this.exits.push(exit);
     }
 
+    getDescription() {
+        let description = this.description;
+        for (let item of this.items) {
+            description += `\n${item.description}`;
+        }
+        return description;
+    }
+
     getExit(direction) {
         return this.exits.find((exit) => exit.direction === direction);
     }
@@ -33,6 +41,7 @@ class Room {
             this.items.splice(index, 1);
         }
     }
+
 
     hasItem(itemName) {
         const item = this.items.find((item) => item.name === itemName);

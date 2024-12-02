@@ -12,17 +12,20 @@ const submitBtn = document.getElementById('submit-btn');
 
 // Function to append messages to the game output
 function appendMessage(message) {
-    const p = document.createElement('p');
-    p.innerHTML = message;
-    gameOutput.appendChild(p);
+    const lines = message.split('\n');
+    lines.forEach(line => {
+        const p = document.createElement('p');
+        p.innerHTML = line;
+        gameOutput.appendChild(p);
+    });
     gameOutput.scrollTop = gameOutput.scrollHeight; // Scroll to the bottom
 }
 
 // Say hello to the user
-appendMessage(`<b>SYSTEM:</b> Welcome to the game!`);
+appendMessage(`Welcome to the game!`);
 
 // Append the current room description to the game output
-appendMessage(`<b>SYSTEM:</b> ${currentRoom.description}`);
+appendMessage(`<b>SYSTEM:</b> ${currentRoom.getDescription()}`);
 
 // State the available exits
 let exits = currentRoom.exits.map((exit) => exit.direction);

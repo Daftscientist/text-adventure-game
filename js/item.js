@@ -6,6 +6,7 @@ class Item {
         this.description = description;
         this.onTake = onTake;
         this.usageLocations = [];
+        this.onDrop = () => `You drop the ${this.name}.`;
     }
 
     addUsageLocation(location) {
