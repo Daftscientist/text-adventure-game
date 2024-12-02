@@ -45,7 +45,7 @@ submitBtn.addEventListener('click', () => {
         }
 
         // Execute the command and get the result
-        let result = command.callback();
+        let result = command.callback(userInput);
 
         // Append the result to the game output
         appendMessage(`<b>SYSTEM:</b> ${result}`);

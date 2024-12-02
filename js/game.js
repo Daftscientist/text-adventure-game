@@ -106,6 +106,40 @@ function Game() {
         }
     }));
 
+    parser.addCommand(new Command(["go", "east"], "Go to the room to the east", () => {
+        const exit = currentRoom.getExit("east");
+
+        if (exit) {
+            currentRoom = rooms.find((room) => room.name === exit.description);
+            return "You go east.";
+        } else {
+            return "There is no exit to the east.";
+        }
+    }));
+
+    parser.addCommand(new Command(["go", "west"], "Go to the room to the west", () => {
+        const exit = currentRoom.getExit("west");
+
+        if (exit) {
+            currentRoom = rooms.find((room) => room.name === exit.description);
+            return "You go west.";
+        } else {
+            return "There is no exit to the west.";
+        }
+    }));
+
+    parser.addCommand(new Command(["inventory"], "Check your inventory", () => {
+        if (inventory.length > 0) {
+            return `Inventory: ${inventory.map((item) => item.name).join(', ')}`;
+        } else {
+            return "Your inventory is empty.";
+        }
+    }));
+
+    parser.addCommand(new Command(["take"], "Take requested item.",  (secondWord) => {
+        // make the second word work
+    }, true));
+
     // Start the game
 
     currentRoom = outside0;

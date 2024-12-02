@@ -2,10 +2,11 @@
 
 // Command object
 class Command {
-    constructor(identifier, description, callback) {
+    constructor(identifier, description, callback, isTwoWordCommand = false) {
         this.identifier = identifier; // Array of strings
         this.description = description; // String
         this.callback = callback; // Function to execute command
+        this.isTwoWordCommand = isTwoWordCommand; // Boolean
     }
 
     execute() {
