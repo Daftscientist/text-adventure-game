@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Mysterious Mall - Text Adventure</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             background: url('https://images.pexels.com/photos/2208967/pexels-photo-2208967.jpeg?cs=srgb&dl=pexels-paul-basel-903490-2208967.jpg&fm=jpg') no-repeat center center fixed;
@@ -29,6 +31,18 @@
             background: rgba(255, 255, 255, 0.2);
             color: rgba(255, 255, 255, 1);
         }
+        /* Custom scrollbar styles */
+        #game-output::-webkit-scrollbar {
+            width: 12px;
+        }
+        #game-output::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        #game-output::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            border: 3px solid rgba(0, 0, 0, 0.5);
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
@@ -37,7 +51,13 @@
         <div id="game-output" class="mb-4 p-4 bg-gray-700 bg-blur rounded h-96 overflow-y-auto shadow-mysterious">
         </div>
         <input id="game-input" type="text" class="w-full p-3 bg-gray-700 bg-blur rounded mb-4 shadow-mysterious" placeholder="Enter your command...">
-        <button id="submit-btn" class="w-full p-3 rounded shadow-mysterious btn-blend">Submit</button>
+        <div class="flex justify-between">
+            <button id="submit-btn" class="w-2/8 p-3 rounded shadow-mysterious btn-blend">Submit</button>
+            <div class="flex space-x-2">
+                <button onclick="location.reload();" class="w-1/8 px-6 rounded shadow-mysterious btn-blend"><i class="fas fa-redo"></i></button>
+                <button id="save-btn" class="w-1/8 px-6 rounded shadow-mysterious btn-blend"><i class="fas fa-save"></i></button>
+            </div>
+        </div>
     </div>
     <script src="entry.js" type="module"></script>
 </body>
