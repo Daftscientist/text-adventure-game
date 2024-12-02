@@ -145,7 +145,7 @@ function Game() {
     parser.addCommand(new Command(["help"], "Look around the room", (command) => {
         // Get a list of all the commands
         const commands = parser.commands.map((command) => command.identifier.join(', ')).join(', ');
-        return `Available commands: ${commands}`;        
+        return `Available commands: ${commands}`;       
     }));
 
     parser.addCommand(new Command(["exits"], "List the rooms exits", () => {
