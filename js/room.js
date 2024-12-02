@@ -12,6 +12,7 @@ class Room {
         this.name = name;
         this.description = description;
         this.exits = []; // Array of Exit objects
+        this.items = []; // Array of Item objects
     }
 
     addExit(exit) {
@@ -20,6 +21,21 @@ class Room {
 
     getExit(direction) {
         return this.exits.find((exit) => exit.direction === direction);
+    }
+
+    addItem(item) {
+        this.items.push(item);
+    }
+
+    removeItem(item) {
+        const index = this.items.indexOf(item);
+        if (index !== -1) {
+            this.items.splice(index, 1);
+        }
+    }
+
+    hasItem(itemName) {
+        return this.items.some((item) => item.name === itemName);
     }
 }
 

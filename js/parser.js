@@ -3,7 +3,6 @@ import Command from "./command.js";
 
 class Parser {
     constructor() {
-        console.log('Parser class instantiated');
         this.commands = [];
     }
 
@@ -39,7 +38,6 @@ class Parser {
 
     // Parse the input and match it to a command
     parseAndMatch(input) {
-        console.log(input)
         // Parse the input
         input = this.parse(input);
 

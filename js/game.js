@@ -1,12 +1,14 @@
 import Parser from "./parser.js";
 import Command from "./command.js";
 import { Room, Exit } from "./room.js";
+import Item from "./item.js";
 
 function Game() {
     // Setup rooms
 
     let currentRoom = null;
     let rooms = [];
+    let inventory = [];
 
     // Create rooms and exits
 
@@ -22,6 +24,8 @@ function Game() {
         `
     );
     outside0.addExit(new Exit("south", "Room 4"));
+
+
     const room1 = new Room("Room 1",
         `
             The room is empty, save for the shadows that stretch across the walls and floor, creating an eerie and unsettling atmosphere.
@@ -30,8 +34,12 @@ function Game() {
             The silence feels heavy, almost oppressive, as if the room itself is holding its breath, waiting for something to happen. 
         `
     );
+
+
     const room2 = new Room("Room 2", "security room, if room (9) alarm isn’t disarmed security kills the character, but if disarmed security let the character go");
     const room3 = new Room("Room 3", "lift key locked, or open with crowbar");
+
+
     const room4 = new Room("Room 4",
         `
             You find yourself outside the same eerie mall, but from a different angle. The skeletal structure of the building looms even more ominously here, with steel beams jutting out at odd angles, casting long, twisted shadows on the ground.
@@ -42,6 +50,13 @@ function Game() {
             You can't shake the feeling that you're being watched, but there's no one in sight. The sense of unease is palpable, making you question whether you should proceed or turn back.
         `
     );
+    room4.addItem(new Item("hammer", "An old and worn hammer", () => {
+        return "You pick up the hammer.";
+    }));
+    room4.addExit(new Exit("south", "Room 8"));
+    room4.addExit(new Exit("north", "Outside 0"));
+
+
     const room5 = new Room("Room 5", "Corridor");
     const room6 = new Room("Room 6", "key for lift");
     const room7 = new Room("Room 7", "kills security, so that the corridor to the lift is open");
@@ -71,7 +86,6 @@ function Game() {
 
     parser.addCommand(new Command(["go", "north"], "Go to the room to the north", () => {
         const exit = currentRoom.getExit("north");
-        console.log(currentRoom)
 
         if (exit) {
             currentRoom = rooms.find((room) => room.name === exit.description);
