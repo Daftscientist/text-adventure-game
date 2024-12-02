@@ -1,8 +1,7 @@
 import Game from "./js/game.js";
 
 // Start the game
-let Parser = Game();
-console.log(Parser);
+let Parser, currentRoom = Game();
 
 // Get references to the DOM elements
 const gameOutput = document.getElementById('game-output');
@@ -16,6 +15,16 @@ function appendMessage(message) {
     gameOutput.appendChild(p);
     gameOutput.scrollTop = gameOutput.scrollHeight; // Scroll to the bottom
 }
+
+// Say hello to the user
+appendMessage(`<b>SYSTEM:</b> Welcome to the game!`);
+
+// Append the current room description to the game output
+appendMessage(`<b>SYSTEM:</b> ${currentRoom.description}`);
+
+// State the available exits
+let exits = currentRoom.exits.map((exit) => exit.direction);
+appendMessage(`<b>SYSTEM:</b> Exits: ${exits.join(', ')}`);
 
 // Event listener for the submit button
 submitBtn.addEventListener('click', () => {
@@ -34,7 +43,7 @@ submitBtn.addEventListener('click', () => {
         }
 
         // Execute the command and get the result
-        let result = command.execute();
+        let result = command.callback();
 
         // Append the result to the game output
         appendMessage(`<b>SYSTEM:</b> ${result}`);

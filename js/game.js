@@ -26,8 +26,13 @@ function Game() {
         return currentRoom.description;
     }));
 
+    parser.addCommand(new Command(["help"], "Look around the room", () => {
+        return 'help';
+    }));
+
     parser.addCommand(new Command(["go", "north"], "Go to the room to the north", () => {
         const exit = currentRoom.getExit("north");
+        console.log(currentRoom)
 
         if (exit) {
             currentRoom = rooms.find((room) => room.name === exit.description);
@@ -51,8 +56,7 @@ function Game() {
     // Start the game
 
     currentRoom = room1;
-    console.log(room1.description);
-    return parser;
+    return parser, currentRoom;
 }
 
 export default Game;

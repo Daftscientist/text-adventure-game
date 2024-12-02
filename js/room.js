@@ -19,7 +19,7 @@ class Room {
     }
 
     getExit(direction) {
-        return this.exits[direction];
+        return this.exits.find((exit) => exit.direction === direction);
     }
 }
 
