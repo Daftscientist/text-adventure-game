@@ -3,12 +3,55 @@ import Command from "./command.js";
 import { Room, Exit } from "./room.js";
 import Item from "./item.js";
 
+
+function loadGame() {
+    let savedgame = localStorage.getItem("savedgame");
+    if (savedgame) {
+        let savedgameobj = JSON.parse(savedgame);
+        let currentRoomName = savedgameobj.currentRoom;
+        let rooms = savedgameobj.rooms;
+        let inventory = savedgameobj.inventory;
+        let currentRoom = rooms.find((room) => room.name === currentRoomName);
+        return [currentRoom, rooms, inventory];
+    } else {
+        return [null, [], []];
+    }
+}
+
 function Game() {
     // Setup rooms
 
-    let currentRoom = null;
-    let rooms = [];
-    let inventory = [];
+    // check local storage for saved game
+    // if there is a saved game, load it
+
+    let savedgame = loadGame();
+
+    let currentRoom = savedgame[0];
+    let rooms = savedgame[1];
+    let inventory = savedgame[2];
+
+    // save game listener
+
+    window.addEventListener('beforeunload', function (e) {
+        let savedgame = {
+            currentRoom: currentRoom.name,
+            rooms: rooms,
+            inventory: inventory
+        };
+        localStorage.setItem("savedgame", JSON.stringify(savedgame));
+    });
+
+    // save on button press
+
+    const saveBtn = document.getElementById('save-btn');
+    saveBtn.addEventListener('click', () => {
+        let savedgame = {
+            currentRoom: currentRoom.name,
+            rooms: rooms,
+            inventory: inventory
+        };
+        localStorage.setItem("savedgame", JSON.stringify(savedgame));
+    });
 
     // Create rooms and exits
 

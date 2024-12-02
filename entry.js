@@ -61,6 +61,10 @@ submitBtn.addEventListener('click', () => {
     }
 });
 
+
+
+
+
 // Optional: Allow pressing Enter to submit the command
 gameInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
