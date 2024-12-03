@@ -3,55 +3,20 @@ import Command from "./command.js";
 import { Room, Exit } from "./room.js";
 import Item from "./item.js";
 
-
-function loadGame() {
-    let savedgame = localStorage.getItem("savedgame");
-    if (savedgame) {
-        let savedgameobj = JSON.parse(savedgame);
-        let currentRoomName = savedgameobj.currentRoom;
-        let rooms = savedgameobj.rooms;
-        let inventory = savedgameobj.inventory;
-        let currentRoom = rooms.find((room) => room.name === currentRoomName);
-        return [currentRoom, rooms, inventory];
-    } else {
-        return [null, [], []];
-    }
-}
-
 function Game() {
     // Setup rooms
 
     // check local storage for saved game
     // if there is a saved game, load it
 
-    let savedgame = loadGame();
+    //let savedgame = loadGame();
 
-    let currentRoom = savedgame[0];
-    let rooms = savedgame[1];
-    let inventory = savedgame[2];
+    let currentRoom = null;
+    let rooms = [];
+    let inventory = [];
 
-    // save game listener
-
-    window.addEventListener('beforeunload', function (e) {
-        let savedgame = {
-            currentRoom: currentRoom.name,
-            rooms: rooms,
-            inventory: inventory
-        };
-        localStorage.setItem("savedgame", JSON.stringify(savedgame));
-    });
 
     // save on button press
-
-    const saveBtn = document.getElementById('save-btn');
-    saveBtn.addEventListener('click', () => {
-        let savedgame = {
-            currentRoom: currentRoom.name,
-            rooms: rooms,
-            inventory: inventory
-        };
-        localStorage.setItem("savedgame", JSON.stringify(savedgame));
-    });
 
     // Create rooms and exits
 
@@ -164,8 +129,25 @@ function Game() {
 
 
 
-    const room7 = new Room("Room 7", "kills security, so that the corridor to the lift is open");
-    const room8 = new Room("Room 8", "Outside window boarded up");
+    const room7 = new Room("Room 7", 
+        `
+            The room is tucked away in a corner of the unfinished building, at the base of the elevator shaft, and is far enough from prying eyes to avoid detection by those involved in the illicit activities above.
+            The walls are made of thick concrete or steel panels, adorned only by a series of surveillance monitors and a few control panels that oversee the elevator’s operation and security systems within the mall. 
+        `
+    );
+    room7.addExit(new Exit("north", "Room 3"));
+    room7.addExit(new Exit("south", "Room 11"));
+    room7.addExit(new Exit("west", "Room 6"));
+
+
+    const room8 = new Room("Room 8", 
+        `
+            You find yourself standing at the edge of a once-bustling shopping center, now eerily silent and forgotten. The towering structure before you is a haunting reminder of a time long past—its once-glowing neon signs now flicker faintly, and its wide glass doors are sealed shut, leaving only the whispers of the past to haunt the crumbling walls. The overgrown parking lot stretches out like a graveyard for abandoned vehicles, and the fading murals on the walls tell stories of an era that seems lost to time.
+            As you gaze up at the decaying mall, a sense of curiosity and unease mixes in your chest. What happened to the people who once roamed these halls? Why was this place abandoned? And more importantly—what lies within, waiting to be discovered?
+        `
+    );
+
+
     const room9 = new Room("Room 9", "Inside on enter alarm going off enter code to disarm – if not they die – Hint on death look for code outside");
     const room10 = new Room("Room 10", "get a gun");
     const room11 = new Room("Room 11", "empty dark room");
