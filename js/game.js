@@ -249,6 +249,6 @@ function Game() {
     
     return [parser, currentRoom, rooms, inventory];
 
-};
+}
 
 export default Game;
