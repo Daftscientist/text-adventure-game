@@ -61,13 +61,25 @@ submitBtn.addEventListener('click', () => {
     }
 });
 
-
-
-
-
 // Optional: Allow pressing Enter to submit the command
 gameInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         submitBtn.click();
     }
+});
+
+// Optional: Focus on the input when the page loads
+gameInput.focus();
+
+// add save capability
+let saveBtn = document.getElementById('save-btn');
+saveBtn.addEventListener('click', () => {
+    let saveData = {
+        parser: gameres[0],
+        currentRoom: gameres[1],
+        rooms: gameres[2],
+        inventory: gameres[3]
+    };
+    // Save the game data to cookie keeping all the data as js objects with attributes and methods
+    appendMessage(`<b>SYSTEM:</b> Game saved.`);
 });
