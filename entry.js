@@ -22,14 +22,14 @@ function appendMessage(message) {
 }
 
 // Say hello to the user
-appendMessage(`Welcome to the game!`);
+appendMessage(`<b>SYSTEM:</b> Welcome to the game!`);
 
 // Append the current room description to the game output
-appendMessage(`<b>SYSTEM:</b> ${currentRoom.getDescription()}`);
+appendMessage(`<b>GAME:</b> ${currentRoom.getDescription()}`);
 
 // State the available exits
 let exits = currentRoom.exits.map((exit) => exit.direction);
-appendMessage(`<b>SYSTEM:</b> Exits: ${exits.join(', ')}`);
+appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
 
 // Event listener for the submit button
 submitBtn.addEventListener('click', () => {
@@ -57,7 +57,7 @@ submitBtn.addEventListener('click', () => {
         }
 
         // Append the result to the game output
-        appendMessage(`<b>SYSTEM:</b> ${result}`);
+        appendMessage(`<b>GAME:</b> ${result}`);
     }
 });
 
