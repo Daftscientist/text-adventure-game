@@ -1,12 +1,13 @@
 // Class that stores the item data
 
 class Item {
-    constructor(name, description, onTake) {
+    constructor(name, description, onTake, onUse) {
         this.name = name;
         this.description = description;
         this.onTake = onTake;
         this.usageLocations = [];
         this.onDrop = () => `You drop the ${this.name}.`;
+        this.onUse = onUse;
     }
 
     addUsageLocation(location) {

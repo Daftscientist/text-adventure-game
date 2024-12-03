@@ -46,6 +46,9 @@ function Game() {
     room1.addExit(new Exit("East", "Room 2"));
     room1.addItem(new Item("crowbar", "A crowbar lies on the floor, its metal surface cold and slightly rusted. It looks like it could be useful for prying open something.", () => {
         return "You pick up the crowbar.";
+    }, () => {
+        // add an exit to the elevator room
+        return "You use the crowbar to force open the elevator door.";
     }));
 
     const room2 = new Room("Room 2",
@@ -87,6 +90,9 @@ function Game() {
     );
     room4.addItem(new Item("hammer", "An old and worn hammer lies still on the floor.", () => {
         return "You pick up the hammer.";
+    }, () => {
+        // add an exit to the elevator room
+        return "You use the hammer to break into the mall. the window shatters";
     }));
     room4.addExit(new Exit("south", "Room 8"));
     room4.addExit(new Exit("north", "Outside 0"));
@@ -125,6 +131,9 @@ function Game() {
         To hold the key is to hold the means of access, the only thing standing between the outside world and the criminal operations above. 
         `, () => {
         return "You pick up the key.";
+    }, () => {
+        // add an exit to the elevator room
+        return "You use the key to unlock the elevator door.";
     }));
 
 
@@ -221,6 +230,19 @@ function Game() {
             return "You don't have such an item in your inventory.";
         }
     }, true));
+
+    parser.addCommand(new Command(["use"], "Use requested item.",  (secondWord) => {
+        const item = inventory.find((item) => item.name === secondWord.toLowerCase());
+        if (item) {
+            // check if the item can be used in the current room
+            if (!item.canUse(currentRoom.name)) {
+                return "You can't use this item here.";
+            }
+            return item.onUse();
+        } else {
+            return "You don't have such an item in your inventory.";
+        }
+    }));
 
     // Start the game
 
