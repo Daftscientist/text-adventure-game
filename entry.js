@@ -4,6 +4,7 @@ import Game from "./js/game.js";
 let gameres = Game();
 let Parser = gameres[0];
 let currentRoom = gameres[1];
+let alarm = gameres[4];
 
 // Get references to the DOM elements
 const gameOutput = document.getElementById('game-output');
@@ -35,6 +36,12 @@ appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
 submitBtn.addEventListener('click', () => {
     const userInput = gameInput.value.trim();
     if (userInput) {
+        if (alarm.status) {
+            let alarmEndTime = alarm.endTime - Math.floor(Date.now() / 1000);
+            appendMessage(`<b>SYSTEM:</b> The alarm is going off! You have ${alarmEndTime} seconds to disable it.`);
+            return;
+        }
+
         appendMessage(`<b>USER:</b> ${userInput}`);
         gameInput.value = '';
 
@@ -58,6 +65,7 @@ submitBtn.addEventListener('click', () => {
 
         // Append the result to the game output
         appendMessage(`<b>GAME:</b> ${result}`);
+        return;
     }
 });
 

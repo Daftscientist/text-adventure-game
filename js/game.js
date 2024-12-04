@@ -13,6 +13,10 @@ function Game() {
     let rooms = [];
     let inventory = [];
     let parser = null;
+    let alarm = {
+        active: false,
+        endTime: 0
+    };
     
     
         // Create rooms and exits
@@ -44,8 +48,12 @@ function Game() {
         room1.addItem(new Item("crowbar", "A crowbar lies on the floor, its metal surface cold and slightly rusted. It looks like it could be useful for prying open something.", () => {
             return "You pick up the crowbar.";
         }, () => {
-            // add an exit to the elevator room
-            return "You use the crowbar to force open the elevator door.";
+            if (currentRoom.name !== "Room 3") {
+                return "You can't use the crowbar here.";
+            }
+            // add exit to room 9 from current room
+            currentRoom.addExit(new Exit("north", "Room 9"));
+            return "You use the crowbar to open the elevator door.";
         }));
 
         const room2 = new Room("Room 2",
@@ -88,8 +96,16 @@ function Game() {
         room4.addItem(new Item("hammer", "An old and worn hammer lies still on the floor.", () => {
             return "You pick up the hammer.";
         }, () => {
-            // add an exit to the elevator room
-            return "You use the hammer to break into the mall. the window shatters";
+            // check that the user is in 13
+            if (currentRoom.name !== "Room 13") {
+                return "You can't use the hammer here.";
+            }
+            alarm.active = true;
+            // give user 5 mins to disarm
+            alarm.endTime = Math.floor(Date.now() / 1000) + 300;
+            // add exit to room 9 from current room
+            currentRoom.addExit(new Exit("north", "Room 9"));
+            return "You use the hammer to break the window.";
         }));
         room4.addExit(new Exit("south", "Room 8"));
         room4.addExit(new Exit("north", "Outside 0"));
@@ -152,16 +168,132 @@ function Game() {
                 As you gaze up at the decaying mall, a sense of curiosity and unease mixes in your chest. What happened to the people who once roamed these halls? Why was this place abandoned? And more importantly—what lies within, waiting to be discovered?
             `
         );
+        room8.addExit(new Exit("north", "Room 4"));
+        room8.addExit(new Exit("south", "Room 12"));
 
 
-        const room9 = new Room("Room 9", "Inside on enter alarm going off enter code to disarm – if not they die – Hint on death look for code outside");
-        const room10 = new Room("Room 10", "get a gun");
-        const room11 = new Room("Room 11", "empty dark room");
+        const room9 = new Room("Room 9", 
+            `
+                As you step into the room, an ear-piercing alarm blares, echoing off the walls and sending a jolt of adrenaline through your veins.
+                The room is dimly lit, with shadows dancing across the concrete floor.
+                A digital keypad glows ominously on the wall, demanding a code to silence the alarm.
+                The air is thick with tension, and you realize that failure to disarm the alarm could have dire consequences.
+                A cryptic hint is scrawled on the wall: "Look outside for the key to your survival."
+                The urgency of the situation presses upon you—time is running out.
+            `
+        );
+        room9.addExit(new Exit("north", "Room 5"));
+        room9.addExit(new Exit("south", "Room 13"));
 
-        rooms.push(outside0, room1, room2, room3, room4, room5, room6, room7, room8, room9, room10, room11);
+
+        const room10 = new Room("Room 10", 
+            `
+                The room is eerily empty, with only the faintest hint of light seeping through the cracks in the walls.
+                The air is thick with dust, and every step you take echoes ominously in the silence.
+                The walls are bare, save for a few cobwebs that cling to the corners, and the floor is covered in a thin layer of grime.
+                As you look around, a sense of unease settles over you, as if the room itself is watching, waiting for something to happen.
+            `
+        );
+        room10.addExit(new Exit("north", "Room 6"));
+        room10.addExit(new Exit("south", "Room 14"));
+
+        
+        const room11 = new Room("Room 11", 
+            `
+                The room is empty, save for the shadows that stretch across the walls and floor, creating an eerie and unsettling atmosphere.
+                The air feels still, as if the space has been untouched for a long time. 
+                There is no sound here, except for the occasional creak or groan of the building, or the distant hum of something mechanical outside.
+                The silence feels heavy, almost oppressive, as if the room itself is holding its breath, waiting for something to happen. 
+            `
+        );
+        room11.addExit(new Exit("north", "Room 7"));
+        room11.addExit(new Exit("west", "Room 10"));
+
+        const room12 = new Room("Room 12", 
+            `
+                You find yourself on an empty street, illuminated by a single flickering streetlamp.
+                The light casts eerie shadows on the ground, and the silence is almost deafening.
+                The air is cool, and you can feel a slight breeze as you stand there, wondering what lies ahead.
+                The street feels abandoned, with no signs of life, and the flickering light adds to the unsettling atmosphere. 
+                Every now and then, the streetlamp buzzes, casting brief moments of darkness that make you feel even more isolated.
+            `
+        );
+        // go north and east
+        room12.addExit(new Exit("north", "Room 8"));
+        room12.addExit(new Exit("east", "Room 13"));
+        // add key that can be used to disable alarm
+        room12.addItem(new Item("key", "A small key lies on the ground, its surface glinting in the dim light. It looks like it could be used in an alarm system.", () => {
+            return "You pick up the key.";
+        }, () => {
+            // check that the user is in 9
+            if (currentRoom.name !== "Room 9") {
+                return "You can't use the key here.";
+            }
+            alarm.active = false;
+            alarm.endTime = 0;
+
+            return "You use the key to disable the alarm.";
+        }
+        ));
+
+        const room13 = new Room("Room 13", 
+            `
+                The shop’s large front window is clouded with grime, obscuring much of what lies inside.
+                A faint flicker of dim light pushes through the dirt-streaked glass, casting elongated shadows that dance along the dusty floor.
+                You can just make out the outlines of old, forgotten objects—shelves cluttered with tarnished silver, cracked porcelain dolls, and weathered books, all draped in layers of dust.
+                The shop feels frozen, as though it has not been touched in years. The silence is suffocating, broken only by the distant hum of the decaying mall.
+                But there is something about the place that sends a shiver down your spine.
+                A cold, unnatural stillness hangs in the air, and the way the faint light flickers in the corner of the shop makes it feel as if something—or someone—is watching from the shadows.
+                The window, though intact, is like a barrier between you and a world locked away in time, hiding its secrets just out of reach.
+                The window looks fragile, as if it could be broken with a bit of force.
+            `
+        );
+        // west and east
+        room13.addExit(new Exit("west", "Room 12"));
+        room13.addExit(new Exit("north", "Room 14"));
 
 
-        rooms.push(room1, room2);
+        const room14 = new Room("Room 14", 
+            `
+                You find yourself outside a window that has been securely boarded up.
+                The wooden planks are old and weathered, but they still hold strong.
+                The area is deserted, and the silence is almost oppressive.
+                You wonder what secrets lie behind the boarded-up window.
+            `
+        );
+        // west and east
+        room14.addExit(new Exit("south", "Room 13"));
+        room14.addExit(new Exit("north", "Room 15"));
+
+        
+        const room15 = new Room("Room 15", 
+            `
+                You stand outside another window that has been securely boarded up.
+                The wooden planks are old and weathered, but they still hold strong.
+                The area is quiet and deserted, and the silence is almost oppressive.
+                You wonder what secrets lie behind the boarded-up window.
+            `
+        );
+        room15.addExit(new Exit("south", "Room 14"));
+        // add rock that can be used to break window
+        room15.addItem(new Item("rock", "A small rock lies on the ground, its surface smooth and worn. It looks like it could be used to break something.", () => {
+            return "You pick up the rock.";
+        }, () => {
+            // check that the user is in 13
+            if (currentRoom.name !== "Room 13") {
+                return "You can't use the rock here.";
+            }
+            // add exit to room 9 from current room
+            // give user 5 mins to disarm
+            alarm.active = true;
+            alarm.endTime = Math.floor(Date.now() / 1000) + 300;
+            currentRoom.addExit(new Exit("north", "Room 9"));
+            return "You use the rock to break the window.";
+        }));
+
+        rooms.push(outside0, room1, room2, room3, room4, room5, room6, room7, room8, room9, room10, room11, room12, room13, room14, room15);
+
+
 
         // Initialize parser
 
@@ -247,7 +379,7 @@ function Game() {
     // Start the game
 
     
-    return [parser, currentRoom, rooms, inventory];
+    return [parser, currentRoom, rooms, inventory, alarm];
 
 }
 
