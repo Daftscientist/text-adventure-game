@@ -3,6 +3,10 @@
 class Item {
     constructor(name, description, onTake, onUse) {
         this.name = name;
+        if (description === undefined) {
+            // console log the error
+            console.error("Description is required for an item" + name);
+        }
         this.description = description;
         this.onTake = onTake;
         this.usageLocations = [];
@@ -22,6 +26,8 @@ class Item {
     }
 
     canUse(location) {
+        console.log(this.usageLocations);
+        console.log(location)
         return this.usageLocations.includes(location);
     }
 

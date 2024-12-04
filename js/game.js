@@ -45,7 +45,7 @@ function Game() {
         );
         room1.addExit(new Exit("South", "Room 5"));
         room1.addExit(new Exit("East", "Room 2"));
-        room1.addItem(new Item("crowbar", "A crowbar lies on the floor, its metal surface cold and slightly rusted. It looks like it could be useful for prying open something.", () => {
+        const crowbarItem = new Item("crowbar", "A crowbar lies on the floor, its metal surface cold and slightly rusted. It looks like it could be useful for prying open something.", () => {
             return "You pick up the crowbar.";
         }, () => {
             if (currentRoom.name !== "Room 3") {
@@ -54,7 +54,9 @@ function Game() {
             // add exit to room 9 from current room
             currentRoom.addExit(new Exit("north", "Room 9"));
             return "You use the crowbar to open the elevator door.";
-        }));
+        })
+        crowbarItem.addUsageLocation("Room 3");
+        room1.addItem(crowbarItem);
 
         const room2 = new Room("Room 2",
             `
@@ -93,7 +95,9 @@ function Game() {
                 You can't shake the feeling that you're being watched, but there's no one in sight. The sense of unease is palpable, making you question whether you should proceed or turn back.
             `
         );
-        room4.addItem(new Item("hammer", "An old and worn hammer lies still on the floor.", () => {
+        
+
+        const hammerItem = new Item("hammer", "An old and worn hammer lies still on the floor.", () => {
             return "You pick up the hammer.";
         }, () => {
             // check that the user is in 13
@@ -106,7 +110,9 @@ function Game() {
             // add exit to room 9 from current room
             currentRoom.addExit(new Exit("north", "Room 9"));
             return "You use the hammer to break the window.";
-        }));
+        })
+        hammerItem.addUsageLocation("Room 13");
+        room4.addItem(hammerItem);
         room4.addExit(new Exit("south", "Room 8"));
         room4.addExit(new Exit("north", "Outside 0"));
 
@@ -135,7 +141,7 @@ function Game() {
         room6.addExit(new Exit("north", "Room 2"));
         room6.addExit(new Exit("east", "Room 7"));
         room6.addExit(new Exit("south", "Room 10"));
-        room6.addItem(new Item("elevatorkey", `
+        const elevatorKeyItem = new Item("elevatorkey", `
             There rests an 'elevatorKey'.
             It's an old-fashioned brass key, worn smooth from use, but still distinctly functional. 
             Its shape is simple, unassuming—a single, heavy object that holds great potential. The key is tied to a purposeful lock—one that secures the elevator shaft leading to the top floors of the incomplete mall, where drug dealing is taking place. 
@@ -147,7 +153,10 @@ function Game() {
         }, () => {
             // add an exit to the elevator room
             return "You use the key to unlock the elevator door.";
-        }));
+        })
+        elevatorKeyItem.addUsageLocation("Room 7");
+
+        room6.addItem(elevatorKeyItem);
 
 
 
@@ -222,7 +231,7 @@ function Game() {
         room12.addExit(new Exit("north", "Room 8"));
         room12.addExit(new Exit("east", "Room 13"));
         // add key that can be used to disable alarm
-        room12.addItem(new Item("alarmkey", "A small 'alarmkey' lies on the ground, its surface glinting in the dim light. It looks like it could be used in an alarm system.", () => {
+        const alarmKeyItem = new Item("alarmkey", "A small 'alarmkey' lies on the ground, its surface glinting in the dim light. It looks like it could be used in an alarm system.", () => {
             return "You pick up the key.";
         }, () => {
             // check that the user is in 9
@@ -233,8 +242,9 @@ function Game() {
             alarm.endTime = 0;
 
             return "You use the key to disable the alarm.";
-        }
-        ));
+        })
+        alarmKeyItem.addUsageLocation("Room 9");
+        room12.addItem(alarmKeyItem);
 
         const room13 = new Room("Room 13", 
             `
@@ -250,7 +260,7 @@ function Game() {
         );
         // west and east
         room13.addExit(new Exit("west", "Room 12"));
-        room13.addExit(new Exit("north", "Room 14"));
+        room13.addExit(new Exit("east", "Room 14"));
 
 
         const room14 = new Room("Room 14", 
@@ -276,7 +286,7 @@ function Game() {
         );
         room15.addExit(new Exit("south", "Room 14"));
         // add rock that can be used to break window
-        room15.addItem(new Item("rock", "A small rock lies on the ground, its surface smooth and worn. It looks like it could be used to break something.", () => {
+        const rockItem = new Item("rock", "A small rock lies on the ground, its surface smooth and worn. It looks like it could be used to break something.", () => {
             return "You pick up the rock.";
         }, () => {
             // check that the user is in 13
@@ -289,7 +299,9 @@ function Game() {
             alarm.endTime = Math.floor(Date.now() / 1000) + 300;
             currentRoom.addExit(new Exit("north", "Room 9"));
             return "You use the rock to break the window.";
-        }));
+        })
+        rockItem.addUsageLocation("Room 13");
+        room15.addItem(rockItem);
 
         rooms.push(outside0, room1, room2, room3, room4, room5, room6, room7, room8, room9, room10, room11, room12, room13, room14, room15);
 

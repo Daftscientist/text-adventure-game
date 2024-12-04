@@ -10,6 +10,11 @@ class Exit {
 class Room {
     constructor(name, description) {
         this.name = name;
+        if (description === undefined) {
+            // console log the error
+            console.error("Description is required for a room" + name);
+        }
+
         this.description = description;
         this.exits = []; // Array of Exit objects
         this.items = []; // Array of Item objects
@@ -20,6 +25,7 @@ class Room {
     }
 
     getDescription() {
+        console.log(this)
         let description = this.description;
         for (let item of this.items) {
             description += `\n${item.description}`;
