@@ -135,8 +135,8 @@ function Game() {
         room6.addExit(new Exit("north", "Room 2"));
         room6.addExit(new Exit("east", "Room 7"));
         room6.addExit(new Exit("south", "Room 10"));
-        room6.addItem(new Item("key", `
-            There rests a key.
+        room6.addItem(new Item("elevatorKey", `
+            There rests an 'elevatorKey'.
             It's an old-fashioned brass key, worn smooth from use, but still distinctly functional. 
             Its shape is simple, unassuming—a single, heavy object that holds great potential. The key is tied to a purposeful lock—one that secures the elevator shaft leading to the top floors of the incomplete mall, where drug dealing is taking place. 
             The key doesn’t belong to any regular access point; it’s a tool of control, the kind that grants entry to places hidden from plain sight, places where dark business is conducted far from the law. 
@@ -222,7 +222,7 @@ function Game() {
         room12.addExit(new Exit("north", "Room 8"));
         room12.addExit(new Exit("east", "Room 13"));
         // add key that can be used to disable alarm
-        room12.addItem(new Item("key", "A small key lies on the ground, its surface glinting in the dim light. It looks like it could be used in an alarm system.", () => {
+        room12.addItem(new Item("alarmKey", "A small 'alarmKey' lies on the ground, its surface glinting in the dim light. It looks like it could be used in an alarm system.", () => {
             return "You pick up the key.";
         }, () => {
             // check that the user is in 9
