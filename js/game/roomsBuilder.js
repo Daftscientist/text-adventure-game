@@ -2,8 +2,9 @@ import { Room, Exit } from "../room.js";
 import Item from "../item.js";
 
 
-function RoomsBuilder(currentRoom, alarm) {
+function RoomsBuilder(alarm) {
     const rooms = [];
+    let currentRoom = null;
 
     const outside0 = new Room("Outside 0",
         `
@@ -18,6 +19,7 @@ function RoomsBuilder(currentRoom, alarm) {
     );
     outside0.addExit(new Exit("south", "Room 4"));
 
+    currentRoom = outside0;
 
     const room1 = new Room("Room 1",
         `
@@ -291,7 +293,7 @@ function RoomsBuilder(currentRoom, alarm) {
     room15.addItem(rockItem);
 
     rooms.push(outside0, room1, room2, room3, room4, room5, room6, room7, room8, room9, room10, room11, room12, room13, room14, room15);
-    return rooms;
+    return [rooms, currentRoom];
 }
 
 export default RoomsBuilder;

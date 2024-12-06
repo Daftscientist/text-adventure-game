@@ -3,8 +3,6 @@ import CommandsBuilder from './game/commandsBuilder.js';
 import RoomsBuilder from './game/roomsBuilder.js';
 
 function Game() {
-    let currentRoom = null;
-    let rooms = [];
     let inventory = [];
     let parser = null;
     let alarm = {
@@ -12,13 +10,13 @@ function Game() {
         endTime: 0
     };
 
-    rooms = RoomsBuilder(currentRoom, alarm);
-    const outside0 = rooms[0];
+    let roomsBuilderRes = RoomsBuilder(alarm);
+    let rooms = roomsBuilderRes[0];
+    let currentRoom = roomsBuilderRes[1];
 
     const commandsBuilder = CommandsBuilder(currentRoom, rooms, inventory);
     parser = commandsBuilder.getParser();
 
-    currentRoom = outside0;
 
     return [parser, currentRoom, rooms, inventory, alarm];
 
