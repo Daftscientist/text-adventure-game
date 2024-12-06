@@ -19,7 +19,6 @@ function Game() {
 
 
     return [parser, currentRoom, rooms, inventory, alarm];
-
-}
+};
 
 export default Game;
