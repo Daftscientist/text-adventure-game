@@ -81,7 +81,7 @@ function RoomsBuilder(alarm) {
             You can't shake the feeling that you're being watched, but there's no one in sight. The sense of unease is palpable, making you question whether you should proceed or turn back.
         `
     );
-    
+
 
     const hammerItem = new Item("hammer", "An old and worn hammer lies still on the floor.", () => {
         return "You pick up the hammer.";
@@ -149,7 +149,7 @@ function RoomsBuilder(alarm) {
 
 
 
-    const room7 = new Room("Room 7", 
+    const room7 = new Room("Room 7",
         `
             The room is tucked away in a corner of the unfinished building, at the base of the elevator shaft, and is far enough from prying eyes to avoid detection by those involved in the illicit activities above.
             The walls are made of thick concrete or steel panels, adorned only by a series of surveillance monitors and a few control panels that oversee the elevator’s operation and security systems within the mall. 
@@ -160,7 +160,7 @@ function RoomsBuilder(alarm) {
     room7.addExit(new Exit("west", "Room 6"));
 
 
-    const room8 = new Room("Room 8", 
+    const room8 = new Room("Room 8",
         `
             You find yourself standing at the edge of a once-bustling shopping center, now eerily silent and forgotten. The towering structure before you is a haunting reminder of a time long past—its once-glowing neon signs now flicker faintly, and its wide glass doors are sealed shut, leaving only the whispers of the past to haunt the crumbling walls. The overgrown parking lot stretches out like a graveyard for abandoned vehicles, and the fading murals on the walls tell stories of an era that seems lost to time.
             As you gaze up at the decaying mall, a sense of curiosity and unease mixes in your chest. What happened to the people who once roamed these halls? Why was this place abandoned? And more importantly—what lies within, waiting to be discovered?
@@ -170,7 +170,7 @@ function RoomsBuilder(alarm) {
     room8.addExit(new Exit("south", "Room 12"));
 
 
-    const room9 = new Room("Room 9", 
+    const room9 = new Room("Room 9",
         `
             As you step into the room, an ear-piercing alarm blares, echoing off the walls and sending a jolt of adrenaline through your veins.
             The room is dimly lit, with shadows dancing across the concrete floor.
@@ -184,7 +184,7 @@ function RoomsBuilder(alarm) {
     room9.addExit(new Exit("south", "Room 13"));
 
 
-    const room10 = new Room("Room 10", 
+    const room10 = new Room("Room 10",
         `
             The room is eerily empty, with only the faintest hint of light seeping through the cracks in the walls.
             The air is thick with dust, and every step you take echoes ominously in the silence.
@@ -195,8 +195,8 @@ function RoomsBuilder(alarm) {
     room10.addExit(new Exit("north", "Room 6"));
     room10.addExit(new Exit("south", "Room 14"));
 
-    
-    const room11 = new Room("Room 11", 
+
+    const room11 = new Room("Room 11",
         `
             The room is empty, save for the shadows that stretch across the walls and floor, creating an eerie and unsettling atmosphere.
             The air feels still, as if the space has been untouched for a long time. 
@@ -207,7 +207,7 @@ function RoomsBuilder(alarm) {
     room11.addExit(new Exit("north", "Room 7"));
     room11.addExit(new Exit("west", "Room 10"));
 
-    const room12 = new Room("Room 12", 
+    const room12 = new Room("Room 12",
         `
             You find yourself on an empty street, illuminated by a single flickering streetlamp.
             The light casts eerie shadows on the ground, and the silence is almost deafening.
@@ -235,7 +235,7 @@ function RoomsBuilder(alarm) {
     alarmKeyItem.addUsageLocation("Room 9");
     room12.addItem(alarmKeyItem);
 
-    const room13 = new Room("Room 13", 
+    const room13 = new Room("Room 13",
         `
             The shop’s large front window is clouded with grime, obscuring much of what lies inside.
             A faint flicker of dim light pushes through the dirt-streaked glass, casting elongated shadows that dance along the dusty floor.
@@ -252,7 +252,7 @@ function RoomsBuilder(alarm) {
     room13.addExit(new Exit("east", "Room 14"));
 
 
-    const room14 = new Room("Room 14", 
+    const room14 = new Room("Room 14",
         `
             You find yourself outside a window that has been securely boarded up.
             The wooden planks are old and weathered, but they still hold strong.
@@ -264,8 +264,8 @@ function RoomsBuilder(alarm) {
     room14.addExit(new Exit("south", "Room 13"));
     room14.addExit(new Exit("north", "Room 15"));
 
-    
-    const room15 = new Room("Room 15", 
+
+    const room15 = new Room("Room 15",
         `
             You stand outside another window that has been securely boarded up.
             The wooden planks are old and weathered, but they still hold strong.
