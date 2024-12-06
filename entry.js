@@ -36,12 +36,6 @@ appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
 submitBtn.addEventListener('click', () => {
     const userInput = gameInput.value.trim();
     if (userInput) {
-        if (alarm.status == true) {
-            //not being called
-            let alarmEndTime = alarm.endTime - Math.floor(Date.now() / 1000);
-            appendMessage(`<b>SYSTEM:</b> The alarm is going off! You have ${alarmEndTime} seconds to disable it.`);
-            return;
-        }
 
         appendMessage(`<b>USER:</b> ${userInput}`);
         gameInput.value = '';
@@ -66,6 +60,12 @@ submitBtn.addEventListener('click', () => {
 
         // Append the result to the game output
         appendMessage(`<b>GAME:</b> ${result}`);
+
+        if (alarm.active === true) {
+            //not being called
+            let alarmEndTime = alarm.endTime - Math.floor(Date.now() / 1000);
+            appendMessage(`<b>SYSTEM:</b> The alarm is going off! You have ${alarmEndTime} seconds to disable it.`);
+        }
         return;
     }
 });
