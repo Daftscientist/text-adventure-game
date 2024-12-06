@@ -63,7 +63,7 @@ submitBtn.addEventListener('click', () => {
 
         if (alarm.active === true) {
             let alarmEndTime = alarm.endTime - Math.floor(Date.now() / 1000);
-            appendMessage(`<b>SYSTEM:</b> The alarm is going off! You have ${alarmEndTime} seconds to disable it.`);
+            appendMessage(`<b>SYSTEM:</b> The alarm is going off! You have ${alarmEndTime} seconds to disable it.\n<b>SYSTEM:</b> Use the 'alarmkey' in the first room of the mall to disable the alarm!`);
         }
         return;
     }
