@@ -25,7 +25,6 @@ class Room {
     }
 
     getDescription() {
-        console.log(this)
         let description = this.description;
         for (let item of this.items) {
             description += `\n${item.description}`;

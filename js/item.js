@@ -26,8 +26,7 @@ class Item {
     }
 
     canUse(location) {
-        console.log(this.usageLocations);
-        console.log(location)
+
         return this.usageLocations.includes(location);
     }
 
