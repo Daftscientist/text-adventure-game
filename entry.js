@@ -36,7 +36,27 @@ appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
 submitBtn.addEventListener('click', () => {
     const userInput = gameInput.value.trim();
     if (userInput) {
-
+        if (alarm.active === true) {
+            // if time is expired
+            if (alarm.endTime < Math.floor(Date.now() / 1000)) {
+                appendMessage(`<b>SYSTEM:</b> The alarm has gone off!`);
+                // block the user from entering any commands
+                submitBtn.disabled = true;
+                // send countdown till page reload countdown to be viewable
+                let countdown = 5;
+                appendMessage(`<b>SYSTEM:</b> The page will reload in ${countdown} seconds.`);
+                // countdown to reload the page
+                let interval = setInterval(() => {
+                    countdown--;
+                    appendMessage(`<b>SYSTEM:</b> The page will reload in ${countdown} seconds.`);
+                    if (countdown === 0) {
+                        clearInterval(interval);
+                        location.reload();
+                    }
+                }, 1000);
+                return;
+            }
+        }
         appendMessage(`<b>USER:</b> ${userInput}`);
         gameInput.value = '';
 
