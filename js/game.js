@@ -1,5 +1,5 @@
 import { parse } from 'https://cdn.jsdelivr.net/npm/flatted@3.3.2/+esm';
-import CommandsBuilder from "./game/commandsBuilder.js";
+import CommandsBuilder from './game/commandsBuilder.js';
 import RoomsBuilder from './game/roomsBuilder.js';
 
 function Game() {

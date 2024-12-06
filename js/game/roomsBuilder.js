@@ -1,4 +1,6 @@
-import { Room, Exit } from "./room.js";
+import { Room, Exit } from "../room.js";
+import Item from "../item.js";
+
 
 function RoomsBuilder(currentRoom, alarm) {
     const rooms = [];

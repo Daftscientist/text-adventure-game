@@ -1,6 +1,5 @@
-import Parser from "./parser.js";
-import Command from "./command.js";
-import Item from "./item.js";
+import Parser from "../parser.js";
+import Command from "../command.js";
 
 function CommandsBuilder(currentRoom, rooms, inventory) {
     const parser = new Parser();
@@ -82,6 +81,10 @@ function CommandsBuilder(currentRoom, rooms, inventory) {
             return "You don't have such an item in your inventory.";
         }
     }, true));
+
+    return {
+        getParser
+    };
 }
 
 // Export the parser
