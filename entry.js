@@ -122,3 +122,19 @@ loadBtn.addEventListener('click', () => {
         appendMessage(`<b>SYSTEM:</b> No saved game found.`);
     }
 });
+
+const compassBtn = document.getElementById('compass-btn');
+const closeCompassModalBtn = document.getElementById('close-compass-modal');
+const compassModal = document.getElementById('compass-modal');
+
+// Event listener for the compass button
+compassBtn.addEventListener('click', () => {
+    compassModal.classList.add('active');
+    compassModal.classList.remove('hidden');
+});
+
+// Event listener for the close compass modal button
+closeCompassModalBtn.addEventListener('click', () => {
+    compassModal.classList.remove('active');
+    compassModal.classList.add('hidden');
+});
