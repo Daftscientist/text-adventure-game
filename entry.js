@@ -1,4 +1,25 @@
 import Game from "./js/game.js";
+import { stringify, parse } from 'https://cdn.jsdelivr.net/npm/flatted@3.2.5/esm/index.js';
+
+// Helper function to serialize functions
+function serializeFunctions(obj) {
+    return JSON.parse(stringify(obj, (key, value) => {
+        if (typeof value === 'function') {
+            return `__FUNCTION__${value.toString()}`;
+        }
+        return value;
+    }));
+}
+
+// Helper function to deserialize functions
+function deserializeFunctions(obj) {
+    return parse(JSON.stringify(obj), (key, value) => {
+        if (typeof value === 'string' && value.startsWith('__FUNCTION__')) {
+            return eval(`(${value.slice(12)})`);
+        }
+        return value;
+    });
+}
 
 // Start the game
 let state = Game();
@@ -96,15 +117,49 @@ gameInput.focus();
 
 // Event listener for the save button
 saveBtn.addEventListener('click', () => {
-    // save the state var into a file to download
-
-
+    const saveData = serializeFunctions({
+        state: state,
+    });
+    const blob = new Blob([JSON.stringify(saveData)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'gameState.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 });
 
 // Event listener for the load button
 loadBtn.addEventListener('click', () => {
-    // load the state var from a file that the user selects
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const saveData = deserializeFunctions(JSON.parse(e.target.result));
+                state.alarm = saveData.state.alarm;
+                state.inventory = saveData.state.inventory;
+                state.rooms = saveData.state.rooms;
+                state.parser = saveData.state.parser;
+                state.currentRoom = saveData.state.currentRoom;
 
+                parser = state.parser;
+                currentRoom = state.currentRoom;
+                appendMessage(`<b>SYSTEM:</b> Game loaded.`);
+                appendMessage(`<b>GAME:</b> ${currentRoom.getDescription()}`);
+                let exits = currentRoom.exits.map((exit) => exit.direction);
+                appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
+            };
+            console.log(state)
+            reader.readAsText(file);
+        }
+    };
+    input.click();
 });
 
 const compassBtn = document.getElementById('compass-btn');
