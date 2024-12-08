@@ -101,6 +101,7 @@
                 <button id="compass-btn" class="w-1/8 px-6 rounded shadow-mysterious btn-blend"><i class="fas fa-compass"></i></button>
                 <button id="map-btn" class="w-1/8 px-6 rounded shadow-mysterious btn-blend"><i
                         class="fas fa-map"></i></button>
+                        <button id="inventory-btn" class="w-1/8 px-6 rounded shadow-mysterious btn-blend"><i class="fas fa-box"></i></button>
                 <button onclick="location.reload();" class="w-1/8 px-6 rounded shadow-mysterious btn-blend"><i
                         class="fas fa-redo"></i></button>
                 <button id="save-btn" class="w-1/8 px-6 rounded shadow-mysterious btn-blend"><i
@@ -145,6 +146,18 @@
             </div>
         </div>
     </div>
+<!-- Inventory Modal -->
+<div id="inventory-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-blur rounded-lg shadow-lg p-6 w-3/4 max-w-md">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-white">Inventory</h2>
+            <button id="close-inventory-modal" class="text-gray-500 hover:text-gray-700">&times;</button>
+        </div>
+        <ol id="inventory-container" class="text-white list-decimal pl-6 pr-6">
+            <!-- Inventory items will be dynamically added here -->
+        </ol>
+    </div>
+</div>
 </body>
 
 </html>

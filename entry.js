@@ -138,3 +138,28 @@ closeCompassModalBtn.addEventListener('click', () => {
     compassModal.classList.remove('active');
     compassModal.classList.add('hidden');
 });
+
+const inventoryBtn = document.getElementById('inventory-btn');
+const closeInventoryModalBtn = document.getElementById('close-inventory-modal');
+const inventoryModal = document.getElementById('inventory-modal');
+const inventoryContainer = document.getElementById('inventory-container');
+
+// Event listener for the inventory button
+inventoryBtn.addEventListener('click', () => {
+    // Clear the inventory container
+    inventoryContainer.innerHTML = '';
+    // Add inventory items to the container
+    state.inventory.forEach(item => {
+        const itemDiv = document.createElement('li');
+        itemDiv.textContent = item.name;
+        inventoryContainer.appendChild(itemDiv);
+    });
+    inventoryModal.classList.add('active');
+    inventoryModal.classList.remove('hidden');
+});
+
+// Event listener for the close inventory modal button
+closeInventoryModalBtn.addEventListener('click', () => {
+    inventoryModal.classList.remove('active');
+    inventoryModal.classList.add('hidden');
+});
