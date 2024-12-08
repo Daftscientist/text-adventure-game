@@ -4,6 +4,7 @@ import Game from "./js/game.js";
 let gameres = Game();
 let Parser = gameres[0];
 let currentRoom = gameres[1];
+let rooms = gameres[2];
 let alarm = gameres[4];
 
 // Get references to the DOM elements
@@ -111,3 +112,4 @@ saveBtn.addEventListener('click', () => {
     // Save the game data to cookie keeping all the data as js objects with attributes and methods
     appendMessage(`<b>SYSTEM:</b> Game saved.`);
 });
+
