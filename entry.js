@@ -1,16 +1,16 @@
 import Game from "./js/game.js";
 
 // Start the game
-let gameres = Game();
-let Parser = gameres[0];
-let currentRoom = gameres[1];
-let rooms = gameres[2];
-let alarm = gameres[4];
+let state = Game();
+let parser = state.parser;
+let currentRoom = state.currentRoom;
 
 // Get references to the DOM elements
 const gameOutput = document.getElementById('game-output');
 const gameInput = document.getElementById('game-input');
 const submitBtn = document.getElementById('submit-btn');
+const saveBtn = document.getElementById('save-btn');
+const loadBtn = document.getElementById('load-btn');
 
 // Function to append messages to the game output
 function appendMessage(message) {
@@ -27,42 +27,25 @@ function appendMessage(message) {
 appendMessage(`<b>SYSTEM:</b> Welcome to the game!`);
 
 // Append the current room description to the game output
-appendMessage(`<b>GAME:</b> ${currentRoom.getDescription()}`);
+if (currentRoom) {
+    appendMessage(`<b>GAME:</b> ${currentRoom.getDescription()}`);
+}
 
 // State the available exits
-let exits = currentRoom.exits.map((exit) => exit.direction);
-appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
+if (currentRoom) {
+    let exits = currentRoom.exits.map((exit) => exit.direction);
+    appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
+}
 
 // Event listener for the submit button
 submitBtn.addEventListener('click', () => {
     const userInput = gameInput.value.trim();
     if (userInput) {
-        if (alarm.active === true) {
-            // if time is expired
-            if (alarm.endTime < Math.floor(Date.now() / 1000)) {
-                appendMessage(`<b>SYSTEM:</b> The alarm has gone off!`);
-                // block the user from entering any commands
-                submitBtn.disabled = true;
-                // send countdown till page reload countdown to be viewable
-                let countdown = 5;
-                appendMessage(`<b>SYSTEM:</b> The page will reload in ${countdown} seconds.`);
-                // countdown to reload the page
-                let interval = setInterval(() => {
-                    countdown--;
-                    appendMessage(`<b>SYSTEM:</b> The page will reload in ${countdown} seconds.`);
-                    if (countdown === 0) {
-                        clearInterval(interval);
-                        location.reload();
-                    }
-                }, 1000);
-                return;
-            }
-        }
         appendMessage(`<b>USER:</b> ${userInput}`);
         gameInput.value = '';
 
         // Parse and match the input
-        let command = Parser.parseAndMatch(userInput);
+        let command = parser.parseAndMatch(userInput);
 
         // Check if a command was matched
         if (!command) {
@@ -71,22 +54,17 @@ submitBtn.addEventListener('click', () => {
         }
 
         // Execute the command and get the result
+        let result;
         if (command.isTwoWordCommand) {
-            let input = Parser.parse(userInput);
+            let input = parser.parse(userInput);
             let secondWord = input[1];
-            var result = command.callback(secondWord);
+            result = command.callback(secondWord);
         } else {
-            var result = command.callback();
+            result = command.callback();
         }
 
         // Append the result to the game output
         appendMessage(`<b>GAME:</b> ${result}`);
-
-        if (alarm.active === true) {
-            let alarmEndTime = alarm.endTime - Math.floor(Date.now() / 1000);
-            appendMessage(`<b>SYSTEM:</b> The alarm is going off! You have ${alarmEndTime} seconds to disable it.\n<b>SYSTEM:</b> Use the 'alarmkey' in the first room of the mall to disable the alarm!`);
-        }
-        return;
     }
 });
 
@@ -100,16 +78,47 @@ gameInput.addEventListener('keypress', (e) => {
 // Optional: Focus on the input when the page loads
 gameInput.focus();
 
-// add save capability
-let saveBtn = document.getElementById('save-btn');
+// Event listener for the save button
 saveBtn.addEventListener('click', () => {
-    let saveData = {
-        parser: gameres[0],
-        currentRoom: gameres[1],
-        rooms: gameres[2],
-        inventory: gameres[3]
+    const saveData = {
+        currentRoom: state.currentRoom.name,
+        rooms: state.rooms.map(room => ({
+            name: room.name,
+            description: room.description,
+            exits: room.exits,
+            items: room.items
+        })),
+        inventory: state.inventory.map(item => ({
+            name: item.name,
+            description: item.description,
+            onTake: item.onTake.toString(),
+            onUse: item.onUse.toString(),
+            usageLocations: item.usageLocations
+        }))
     };
-    // Save the game data to cookie keeping all the data as js objects with attributes and methods
+    document.cookie = `gameState=${JSON.stringify(saveData)}; path=/;`;
     appendMessage(`<b>SYSTEM:</b> Game saved.`);
 });
 
+// Event listener for the load button
+loadBtn.addEventListener('click', () => {
+    const cookies = document.cookie.split('; ');
+    const gameStateCookie = cookies.find(cookie => cookie.startsWith('gameState='));
+    if (gameStateCookie) {
+        const gameState = JSON.parse(gameStateCookie.split('=')[1]);
+        state.currentRoom = state.rooms.find(room => room.name === gameState.currentRoom);
+        gameState.rooms.forEach(savedRoom => {
+            const room = state.rooms.find(room => room.name === savedRoom.name);
+            room.description = savedRoom.description;
+            room.exits = savedRoom.exits.map(exit => new Exit(exit.direction, exit.description));
+            room.items = savedRoom.items.map(item => new Item(item.name, item.description, eval(item.onTake), eval(item.onUse)));
+        });
+        state.inventory = gameState.inventory.map(item => new Item(item.name, item.description, eval(item.onTake), eval(item.onUse)));
+        appendMessage(`<b>SYSTEM:</b> Game loaded.`);
+        appendMessage(`<b>GAME:</b> ${state.currentRoom.getDescription()}`);
+        let exits = state.currentRoom.exits.map((exit) => exit.direction);
+        appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
+    } else {
+        appendMessage(`<b>SYSTEM:</b> No saved game found.`);
+    }
+});

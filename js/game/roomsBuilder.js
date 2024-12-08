@@ -1,10 +1,7 @@
 import { Room, Exit } from "../room.js";
 import Item from "../item.js";
 
-
-function RoomsBuilder(alarm) {
-    const rooms = [];
-    let currentRoom = null;
+function RoomsBuilder(state) {
 
     const outside0 = new Room("Outside 0",
         `
@@ -18,8 +15,7 @@ function RoomsBuilder(alarm) {
         `
     );
     outside0.addExit(new Exit("south", "Room 4"));
-
-    currentRoom = outside0;
+    state.currentRoom = outside0;
 
     const room1 = new Room("Room 1",
         `
@@ -29,18 +25,18 @@ function RoomsBuilder(alarm) {
             The silence feels heavy, almost oppressive, as if the room itself is holding its breath, waiting for something to happen. 
         `
     );
-    room1.addExit(new Exit("South", "Room 5"));
-    room1.addExit(new Exit("East", "Room 2"));
+    room1.addExit(new Exit("south", "Room 5"));
+    room1.addExit(new Exit("east", "Room 2"));
     const crowbarItem = new Item("crowbar", "A crowbar lies on the floor, its metal surface cold and slightly rusted. It looks like it could be useful for prying open something.", () => {
         return "You pick up the crowbar.";
     }, () => {
-        if (currentRoom.name !== "Room 3") {
+        if (state.currentRoom.name !== "Room 3") {
             return "You can't use the crowbar here.";
         }
         // add exit to room 9 from current room
-        currentRoom.addExit(new Exit("north", "Room 9"));
+        state.currentRoom.addExit(new Exit("north", "Room 9"));
         return "You use the crowbar to open the elevator door.";
-    })
+    });
     crowbarItem.addUsageLocation("Room 3");
     room1.addItem(crowbarItem);
 
@@ -54,8 +50,8 @@ function RoomsBuilder(alarm) {
             It seems that the security measures are particularly focused on protecting the elevator, which is a crucial link in the operation.
         `
     );
-    room2.addExit(new Exit("West", "Room 1"));
-    room2.addExit(new Exit("South", "Room 6"));
+    room2.addExit(new Exit("west", "Room 1"));
+    room2.addExit(new Exit("south", "Room 6"));
 
     const room3 = new Room("Room 3",
         `
@@ -70,7 +66,6 @@ function RoomsBuilder(alarm) {
     room3.addExit(new Exit("south", "Room 7"));
     room3.addExit(new Exit("west", "Room 2"));
 
-
     const room4 = new Room("Room 4",
         `
             You find yourself outside the same eerie mall, but from a different angle. The skeletal structure of the building looms even more ominously here, with steel beams jutting out at odd angles, casting long, twisted shadows on the ground.
@@ -82,29 +77,27 @@ function RoomsBuilder(alarm) {
         `
     );
 
-
     const hammerItem = new Item("hammer", "An old and worn hammer lies still on the floor.", () => {
         return "You pick up the hammer.";
     }, () => {
-        if (alarm.active != false) {
+        if (state.alarm.active) {
             return "You can't use the hammer here.";
         }
         // check that the user is in 13
-        if (currentRoom.name !== "Room 13") {
+        if (state.currentRoom.name !== "Room 13") {
             return "You can't use the hammer here.";
         }
-        alarm.active = true;
+        state.alarm.active = true;
         // give user 5 mins to disarm
-        alarm.endTime = Math.floor(Date.now() / 1000) + 300;
+        state.alarm.endTime = Math.floor(Date.now() / 1000) + 300;
         // add exit to room 9 from current room
-        currentRoom.addExit(new Exit("north", "Room 9"));
+        state.currentRoom.addExit(new Exit("north", "Room 9"));
         return "You use the hammer to break the window.";
-    })
+    });
     hammerItem.addUsageLocation("Room 13");
     room4.addItem(hammerItem);
     room4.addExit(new Exit("south", "Room 8"));
     room4.addExit(new Exit("north", "Outside 0"));
-
 
     const room5 = new Room("Room 5",
         `
@@ -142,12 +135,10 @@ function RoomsBuilder(alarm) {
     }, () => {
         // add an exit to the elevator room
         return "You use the key to unlock the elevator door.";
-    })
+    });
     elevatorKeyItem.addUsageLocation("Room 7");
 
     room6.addItem(elevatorKeyItem);
-
-
 
     const room7 = new Room("Room 7",
         `
@@ -159,7 +150,6 @@ function RoomsBuilder(alarm) {
     room7.addExit(new Exit("south", "Room 11"));
     room7.addExit(new Exit("west", "Room 6"));
 
-
     const room8 = new Room("Room 8",
         `
             You find yourself standing at the edge of a once-bustling shopping center, now eerily silent and forgotten. The towering structure before you is a haunting reminder of a time long past—its once-glowing neon signs now flicker faintly, and its wide glass doors are sealed shut, leaving only the whispers of the past to haunt the crumbling walls. The overgrown parking lot stretches out like a graveyard for abandoned vehicles, and the fading murals on the walls tell stories of an era that seems lost to time.
@@ -168,7 +158,6 @@ function RoomsBuilder(alarm) {
     );
     room8.addExit(new Exit("north", "Room 4"));
     room8.addExit(new Exit("south", "Room 12"));
-
 
     const room9 = new Room("Room 9",
         `
@@ -183,7 +172,6 @@ function RoomsBuilder(alarm) {
     room9.addExit(new Exit("north", "Room 5"));
     room9.addExit(new Exit("south", "Room 13"));
 
-
     const room10 = new Room("Room 10",
         `
             The room is eerily empty, with only the faintest hint of light seeping through the cracks in the walls.
@@ -194,7 +182,6 @@ function RoomsBuilder(alarm) {
     );
     room10.addExit(new Exit("north", "Room 6"));
     room10.addExit(new Exit("south", "Room 14"));
-
 
     const room11 = new Room("Room 11",
         `
@@ -224,14 +211,14 @@ function RoomsBuilder(alarm) {
         return "You pick up the key.";
     }, () => {
         // check that the user is in 9
-        if (currentRoom.name !== "Room 9") {
+        if (state.currentRoom.name !== "Room 9") {
             return "You can't use the key here.";
         }
-        alarm.active = false;
-        alarm.endTime = 0;
+        state.alarm.active = false;
+        state.alarm.endTime = 0;
 
         return "You use the key to disable the alarm.";
-    })
+    });
     alarmKeyItem.addUsageLocation("Room 9");
     room12.addItem(alarmKeyItem);
 
@@ -251,7 +238,6 @@ function RoomsBuilder(alarm) {
     room13.addExit(new Exit("west", "Room 12"));
     room13.addExit(new Exit("east", "Room 14"));
 
-
     const room14 = new Room("Room 14",
         `
             You find yourself outside a window that has been securely boarded up.
@@ -264,7 +250,6 @@ function RoomsBuilder(alarm) {
     room14.addExit(new Exit("south", "Room 13"));
     room14.addExit(new Exit("north", "Room 15"));
 
-
     const room15 = new Room("Room 15",
         `
             You stand outside another window that has been securely boarded up.
@@ -274,26 +259,28 @@ function RoomsBuilder(alarm) {
         `
     );
     room15.addExit(new Exit("south", "Room 14"));
-    // add rock that can be used to break window
+    
+    // Add rock that can be used to break window
     const rockItem = new Item("rock", "A small rock lies on the ground, its surface smooth and worn. It looks like it could be used to break something.", () => {
         return "You pick up the rock.";
     }, () => {
-        // check that the user is in 13
-        if (currentRoom.name !== "Room 13") {
+        if (state.currentRoom.name !== "Room 13") {
             return "You can't use the rock here.";
         }
-        // add exit to room 9 from current room
-        // give user 5 mins to disarm
-        alarm.active = true;
-        alarm.endTime = Math.floor(Date.now() / 1000) + 300;
-        currentRoom.addExit(new Exit("north", "Room 9"));
+        // Activate alarm and give user 5 minutes to disarm
+        state.alarm.active = true;
+        state.alarm.endTime = Math.floor(Date.now() / 1000) + 300;
+        // Add exit to room 9 from current room
+        state.currentRoom.addExit(new Exit("north", "Room 9"));
         return "You use the rock to break the window.";
-    })
+    });
     rockItem.addUsageLocation("Room 13");
     room15.addItem(rockItem);
-
-    rooms.push(outside0, room1, room2, room3, room4, room5, room6, room7, room8, room9, room10, room11, room12, room13, room14, room15);
-    return [rooms, currentRoom];
+    
+    state.rooms.push(outside0, room1, room2, room3, room4, room5, room6, room7, room8, room9, room10, room11, room12, room13, room14, room15);
+    state.currentRoom = outside0;
+    
+    return state;
 }
 
 export default RoomsBuilder;
