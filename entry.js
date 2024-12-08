@@ -43,6 +43,14 @@ submitBtn.addEventListener('click', () => {
     if (userInput) {
         appendMessage(`<b>USER:</b> ${userInput}`);
         gameInput.value = '';
+        // check if alarm has expired
+        if (state.alarm.active && Date.now() > state.alarm.endTime) {
+            appendMessage(`<b>GAME:</b> The alarm has expired.`);
+            appendMessage(`<b>GAME:</b> Game over!`);
+            state.alarm.active = true;
+            gameInput.disabled = true;
+            return;
+        }
 
         // Parse and match the input
         let command = parser.parseAndMatch(userInput);
@@ -63,8 +71,16 @@ submitBtn.addEventListener('click', () => {
             result = command.callback();
         }
 
+        
+
         // Append the result to the game output
         appendMessage(`<b>GAME:</b> ${result}`);
+        // if alarm is active and command does not start with use then warn
+        if (state.alarm.active && !userInput.startsWith('use')) {
+            appendMessage(`<b>GAME:</b> Warning! The alarm is active. You have ${Math.ceil((state.alarm.endTime - Date.now()) / 1000)} seconds left.`);
+            // instructions to disable
+            appendMessage(`<b>GAME:</b> To disable the alarm, use a special item you should have found earlier.`);
+        }
     }
 });
 
@@ -80,47 +96,15 @@ gameInput.focus();
 
 // Event listener for the save button
 saveBtn.addEventListener('click', () => {
-    const saveData = {
-        currentRoom: state.currentRoom.name,
-        rooms: state.rooms.map(room => ({
-            name: room.name,
-            description: room.description,
-            exits: room.exits,
-            items: room.items
-        })),
-        inventory: state.inventory.map(item => ({
-            name: item.name,
-            description: item.description,
-            onTake: item.onTake.toString(),
-            onUse: item.onUse.toString(),
-            usageLocations: item.usageLocations
-        }))
-    };
-    document.cookie = `gameState=${JSON.stringify(saveData)}; path=/;`;
-    appendMessage(`<b>SYSTEM:</b> Game saved.`);
+    // save the state var into a file to download
+
+
 });
 
 // Event listener for the load button
 loadBtn.addEventListener('click', () => {
-    const cookies = document.cookie.split('; ');
-    const gameStateCookie = cookies.find(cookie => cookie.startsWith('gameState='));
-    if (gameStateCookie) {
-        const gameState = JSON.parse(gameStateCookie.split('=')[1]);
-        state.currentRoom = state.rooms.find(room => room.name === gameState.currentRoom);
-        gameState.rooms.forEach(savedRoom => {
-            const room = state.rooms.find(room => room.name === savedRoom.name);
-            room.description = savedRoom.description;
-            room.exits = savedRoom.exits.map(exit => new Exit(exit.direction, exit.description));
-            room.items = savedRoom.items.map(item => new Item(item.name, item.description, eval(item.onTake), eval(item.onUse)));
-        });
-        state.inventory = gameState.inventory.map(item => new Item(item.name, item.description, eval(item.onTake), eval(item.onUse)));
-        appendMessage(`<b>SYSTEM:</b> Game loaded.`);
-        appendMessage(`<b>GAME:</b> ${state.currentRoom.getDescription()}`);
-        let exits = state.currentRoom.exits.map((exit) => exit.direction);
-        appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
-    } else {
-        appendMessage(`<b>SYSTEM:</b> No saved game found.`);
-    }
+    // load the state var from a file that the user selects
+
 });
 
 const compassBtn = document.getElementById('compass-btn');

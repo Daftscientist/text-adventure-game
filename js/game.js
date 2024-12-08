@@ -13,9 +13,9 @@ function Game() {
         rooms: []
     };
 
-    let roomsBuilderRes = RoomsBuilder(state);
+    RoomsBuilder(state);
 
-    const commandsBuilder = CommandsBuilder(state);
+    CommandsBuilder(state);
 
     // Get references to the modal elements
     const mapModal = document.getElementById('map-modal');

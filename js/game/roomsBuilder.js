@@ -89,7 +89,7 @@ function RoomsBuilder(state) {
         }
         state.alarm.active = true;
         // give user 5 mins to disarm
-        state.alarm.endTime = Math.floor(Date.now() / 1000) + 300;
+        state.alarm.endTime = Date.now() + 300000; // 300000 milliseconds = 5 minutes
         // add exit to room 9 from current room
         state.currentRoom.addExit(new Exit("north", "Room 9"));
         return "You use the hammer to break the window.";
