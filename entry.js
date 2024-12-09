@@ -119,55 +119,25 @@ gameInput.addEventListener('keypress', (e) => {
 });
 
 // Optional: Focus on the input when the page loads
-gameInput.focus();
+document.addEventListener('DOMContentLoaded', () => {
+    gameInput.focus();
+});
 
 // Event listener for the save button
 saveBtn.addEventListener('click', () => {
-    const saveData = serializeFunctions({
-        state: state,
-    });
-    const blob = new Blob([saveData], { type: 'application/json' });
-    console.log(blob)
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'gameState.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // lets save using indexedDB instead of local storage
+    // no need to sterlilize anymore
+    const saveData = {
+        state: state
+    };
+
+
 });
 
 // Event listener for the load button
 loadBtn.addEventListener('click', () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'application/json';
-    input.onchange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const saveData = deserializeFunctions(e.target.result);
-                console.log(saveData)
-                state.alarm = saveData.state.alarm;
-                state.inventory = saveData.state.inventory;
-                state.rooms = saveData.state.rooms;
-                state.parser = saveData.state.parser;
-                state.currentRoom = saveData.state.currentRoom;
+        // lets save using indexedDB instead of local storage
 
-                parser = state.parser;
-                currentRoom = state.currentRoom;
-                appendMessage(`<b>SYSTEM:</b> Game loaded.`);
-                appendMessage(`<b>GAME:</b> ${currentRoom.getDescription()}`);
-                let exits = currentRoom.exits.map((exit) => exit.direction);
-                appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
-            };
-            console.log(state)
-            reader.readAsText(file);
-        }
-    };
-    input.click();
 });
 
 const compassBtn = document.getElementById('compass-btn');
