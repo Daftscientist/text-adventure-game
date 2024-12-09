@@ -120,7 +120,8 @@ saveBtn.addEventListener('click', () => {
     const saveData = serializeFunctions({
         state: state,
     });
-    const blob = new Blob([JSON.stringify(saveData)], { type: 'application/json' });
+    const blob = new Blob([saveData], { type: 'application/json' });
+    console.log(blob)
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -141,7 +142,8 @@ loadBtn.addEventListener('click', () => {
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                const saveData = deserializeFunctions(JSON.parse(e.target.result));
+                const saveData = deserializeFunctions(e.target.result);
+                console.log(saveData)
                 state.alarm = saveData.state.alarm;
                 state.inventory = saveData.state.inventory;
                 state.rooms = saveData.state.rooms;
