@@ -42,7 +42,6 @@ function appendMessage(message, warning=false) {
         if (warning) {
             messageElement.classList.add('text-yellow-500');
             messageElement.classList.add('font-bold');
-            // make text larger
             messageElement.classList.add('text-lg');
         }
         gameOutput.appendChild(messageElement);
