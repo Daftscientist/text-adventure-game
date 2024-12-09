@@ -36,7 +36,7 @@ function RoomsBuilder(state) {
         // add exit to room 9 from current room
         state.currentRoom.addExit(new Exit("north", "Room 9"));
         return "You use the crowbar to open the elevator door.";
-    });
+    }, "🔧");
     crowbarItem.addUsageLocation("Room 3");
     room1.addItem(crowbarItem);
 
@@ -93,7 +93,7 @@ function RoomsBuilder(state) {
         // add exit to room 9 from current room
         state.currentRoom.addExit(new Exit("north", "Room 9"));
         return "You use the hammer to break the window.";
-    });
+    }, "🔨");
     hammerItem.addUsageLocation("Room 13");
     room4.addItem(hammerItem);
     room4.addExit(new Exit("south", "Room 8"));
@@ -135,7 +135,7 @@ function RoomsBuilder(state) {
     }, () => {
         // add an exit to the elevator room
         return "You use the key to unlock the elevator door.";
-    });
+    }, "🔑");
     elevatorKeyItem.addUsageLocation("Room 7");
 
     room6.addItem(elevatorKeyItem);
@@ -218,7 +218,7 @@ function RoomsBuilder(state) {
         state.alarm.endTime = 0;
 
         return "You use the key to disable the alarm.";
-    });
+    }, "🔑");
     alarmKeyItem.addUsageLocation("Room 9");
     room12.addItem(alarmKeyItem);
 
@@ -273,7 +273,7 @@ function RoomsBuilder(state) {
         // Add exit to room 9 from current room
         state.currentRoom.addExit(new Exit("north", "Room 9"));
         return "You use the rock to break the window.";
-    });
+    }, "⛰️");
     rockItem.addUsageLocation("Room 13");
     room15.addItem(rockItem);
     

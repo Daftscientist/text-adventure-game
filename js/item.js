@@ -1,7 +1,7 @@
 // Class that stores the item data
 
 class Item {
-    constructor(name, description, onTake, onUse) {
+    constructor(name, description, onTake, onUse, emoji="⁉️") {
         this.name = name;
         if (description === undefined) {
             // console log the error
@@ -12,6 +12,7 @@ class Item {
         this.usageLocations = [];
         this.onDrop = () => `You drop the ${this.name}.`;
         this.onUse = onUse;
+        this.emoji = emoji || "";
     }
 
     addUsageLocation(location) {

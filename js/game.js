@@ -29,7 +29,7 @@ function Game() {
         rooms.forEach((room) => {
             const roomDiv = document.createElement('div');
             roomDiv.classList.add('room');
-            roomDiv.textContent = room.name;
+            roomDiv.textContent = `${room.name}`;
             if (room.name === currentRoom.name) {
                 roomDiv.classList.add('highlight');
             }

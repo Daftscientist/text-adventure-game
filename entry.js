@@ -190,7 +190,9 @@ inventoryBtn.addEventListener('click', () => {
     // Add inventory items to the container
     state.inventory.forEach(item => {
         const itemDiv = document.createElement('li');
-        itemDiv.textContent = item.name;
+        const itemNameCap = item.name.charAt(0).toUpperCase() + item.name.slice(1);
+
+        itemDiv.textContent = `${item.emoji} - ${itemNameCap}`;
         inventoryContainer.appendChild(itemDiv);
     });
     inventoryModal.classList.add('active');
