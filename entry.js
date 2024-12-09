@@ -34,13 +34,20 @@ const saveBtn = document.getElementById('save-btn');
 const loadBtn = document.getElementById('load-btn');
 
 // Function to append messages to the game output
-function appendMessage(message) {
+function appendMessage(message, warning=false) {
     const lines = message.split('\n');
-    lines.forEach(line => {
-        const p = document.createElement('p');
-        p.innerHTML = line;
-        gameOutput.appendChild(p);
-    });
+    lines.forEach((line) => {
+        const messageElement = document.createElement('p');
+        messageElement.innerHTML = line;
+        if (warning) {
+            messageElement.classList.add('text-yellow-500');
+            messageElement.classList.add('font-bold');
+            // make text larger
+            messageElement.classList.add('text-lg');
+        }
+        gameOutput.appendChild(messageElement);
+    }
+    );
     gameOutput.scrollTop = gameOutput.scrollHeight; // Scroll to the bottom
 }
 
@@ -66,8 +73,8 @@ submitBtn.addEventListener('click', () => {
         gameInput.value = '';
         // check if alarm has expired
         if (state.alarm.active && Date.now() > state.alarm.endTime) {
-            appendMessage(`<b>GAME:</b> The alarm has expired.`);
-            appendMessage(`<b>GAME:</b> Game over!`);
+            appendMessage(`<b>GAME:</b> The alarm has expired.`, true);
+            appendMessage(`<b>GAME:</b> Game over!`, true);
             state.alarm.active = true;
             gameInput.disabled = true;
             return;
@@ -98,9 +105,9 @@ submitBtn.addEventListener('click', () => {
         appendMessage(`<b>GAME:</b> ${result}`);
         // if alarm is active and command does not start with use then warn
         if (state.alarm.active && !userInput.startsWith('use')) {
-            appendMessage(`<b>GAME:</b> Warning! The alarm is active. You have ${Math.ceil((state.alarm.endTime - Date.now()) / 1000)} seconds left.`);
+            appendMessage(`<b>GAME:</b> Warning! The alarm is active. You have ${Math.ceil((state.alarm.endTime - Date.now()) / 1000)} seconds left.`, true);
             // instructions to disable
-            appendMessage(`<b>GAME:</b> To disable the alarm, use a special item you should have found earlier.`);
+            appendMessage(`<b>GAME:</b> To disable the alarm, use a special item you should have found earlier.`, true);
         }
     }
 });
