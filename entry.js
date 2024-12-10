@@ -15,7 +15,7 @@ const saveBtn = document.getElementById('save-btn');
 const loadBtn = document.getElementById('load-btn');
 
 // Function to append messages to the game output
-function appendMessage(message, warning=false) {
+function appendMessage(message, warning=false, largeText=false) {
     const lines = message.split('\n');
     lines.forEach((line) => {
         const messageElement = document.createElement('p');
@@ -24,6 +24,10 @@ function appendMessage(message, warning=false) {
             messageElement.classList.add('text-yellow-500');
             messageElement.classList.add('font-bold');
             messageElement.classList.add('text-lg');
+        }
+        if (largeText) {
+            messageElement.classList.add('text-lg');
+            messageElement.classList.add('font-bold');
         }
         gameOutput.appendChild(messageElement);
     }
@@ -123,14 +127,21 @@ loadBtn.addEventListener('click', async () => {
     const saves = await stateManager.listSaves();
     saves.forEach(save => {
         const saveOption = document.createElement('li');
+        saveOption.className = 'mb-4'
         saveOption.textContent = `${save.saveName} - ${new Date(save.timestamp).toLocaleString()}`;
-        saveOption.addEventListener('click', async () => {
+
+        const loadButton = document.createElement('button');
+        loadButton.textContent = 'Load';
+        loadButton.className = 'px-6 rounded shadow-mysterious btn-blend ml-2'
+        loadButton.addEventListener('click', async () => {
             const loadedState = await stateManager.loadState(save.id);
             Object.assign(state, loadedState); // Update the current state with the loaded state
             loadSaveModal.classList.remove('active');
             loadSaveModal.classList.add('hidden');
-            appendMessage(`<b>SYSTEM:</b> Loaded save: ${save.saveName}`);
+            appendMessage(`<b>SYSTEM:</b> Loaded save: ${save.saveName}`, false, true);
         });
+
+        saveOption.appendChild(loadButton);
         saveOptionsContainer.appendChild(saveOption);
     });
 
