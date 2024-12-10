@@ -1,25 +1,6 @@
 import Game from "./js/game.js";
 import { stringify, parse } from 'https://cdn.jsdelivr.net/npm/flatted@3.2.5/esm/index.js';
-
-// Helper function to serialize functions
-function serializeFunctions(obj) {
-    return JSON.parse(stringify(obj, (key, value) => {
-        if (typeof value === 'function') {
-            return `__FUNCTION__${value.toString()}`;
-        }
-        return value;
-    }));
-}
-
-// Helper function to deserialize functions
-function deserializeFunctions(obj) {
-    return parse(JSON.stringify(obj), (key, value) => {
-        if (typeof value === 'string' && value.startsWith('__FUNCTION__')) {
-            return eval(`(${value.slice(12)})`);
-        }
-        return value;
-    });
-}
+import StateManager from "./js/stateManager.js";
 
 // Start the game
 let state = Game();
@@ -50,6 +31,7 @@ function appendMessage(message, warning=false) {
     gameOutput.scrollTop = gameOutput.scrollHeight; // Scroll to the bottom
 }
 
+// Say hello to the user
 // Say hello to the user
 appendMessage(`<b>SYSTEM:</b> Welcome to the game!`);
 
@@ -123,21 +105,58 @@ document.addEventListener('DOMContentLoaded', () => {
     gameInput.focus();
 });
 
+const stateManager = new StateManager();
+
 // Event listener for the save button
 saveBtn.addEventListener('click', () => {
-    // lets save using indexedDB instead of local storage
-    // no need to sterlilize anymore
-    const saveData = {
-        state: state
-    };
-
-
+    const saveModal = document.getElementById('save-modal');
+    saveModal.classList.add('active');
+    saveModal.classList.remove('hidden');
 });
 
-// Event listener for the load button
-loadBtn.addEventListener('click', () => {
-        // lets save using indexedDB instead of local storage
+// Event listener for the load button to open the load-save modal
+loadBtn.addEventListener('click', async () => {
+    const loadSaveModal = document.getElementById('load-save-modal');
+    const saveOptionsContainer = document.getElementById('save-options-container');
+    saveOptionsContainer.innerHTML = ''; // Clear existing options
 
+    const saves = await stateManager.listSaves();
+    saves.forEach(save => {
+        const saveOption = document.createElement('li');
+        saveOption.textContent = `${save.saveName} - ${new Date(save.timestamp).toLocaleString()}`;
+        saveOption.addEventListener('click', async () => {
+            const loadedState = await stateManager.loadState(save.id);
+            Object.assign(state, loadedState); // Update the current state with the loaded state
+            loadSaveModal.classList.remove('active');
+            loadSaveModal.classList.add('hidden');
+            appendMessage(`<b>SYSTEM:</b> Loaded save: ${save.saveName}`);
+        });
+        saveOptionsContainer.appendChild(saveOption);
+    });
+
+    loadSaveModal.classList.add('active');
+    loadSaveModal.classList.remove('hidden');
+});
+
+// Event listener for the save form submission
+document.getElementById('save-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const saveName = document.getElementById('save-name').value.trim();
+    if (saveName) {
+        await stateManager.saveState(state, saveName);
+        const saveModal = document.getElementById('save-modal');
+        saveModal.classList.remove('active');
+        saveModal.classList.add('hidden');
+        appendMessage(`<b>SYSTEM:</b> Game saved as: ${saveName}`);
+    }
+});
+
+// Event listener for the close buttons in modals
+document.querySelectorAll('.modal button').forEach(button => {
+    button.addEventListener('click', () => {
+        button.closest('.modal').classList.remove('active');
+        button.closest('.modal').classList.add('hidden');
+    });
 });
 
 const compassBtn = document.getElementById('compass-btn');
