@@ -165,6 +165,28 @@ class StateManager {
         return state;
     }
 
+    // Delete a specific save by its ID
+    async deleteSave(saveId) {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                reject(new Error("Database not initialized"));
+                return;
+            }
+
+            const transaction = this.db.transaction([this.storeName], "readwrite");
+            const store = transaction.objectStore(this.storeName);
+            const request = store.delete(saveId);
+
+            request.onsuccess = () => {
+                resolve();
+            };
+
+            request.onerror = () => {
+                reject(request.error);
+            };
+        });
+    }
+
     // Helper method to get the class constructor by name
     getClassConstructor(className) {
         switch (className) {
