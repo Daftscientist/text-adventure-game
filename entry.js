@@ -132,7 +132,7 @@ loadBtn.addEventListener('click', async () => {
 
         const loadButton = document.createElement('button');
         loadButton.textContent = 'Load';
-        loadButton.className = 'px-6 rounded shadow-mysterious btn-blend ml-2';
+        loadButton.className = 'px-1 rounded shadow-mysterious btn-blend ml-2';
         loadButton.addEventListener('click', async () => {
             const loadedState = await stateManager.loadState(save.id);
             Object.assign(state, loadedState); // Update the current state with the loaded state
@@ -143,7 +143,7 @@ loadBtn.addEventListener('click', async () => {
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
-        deleteButton.className = 'px-6 rounded shadow-mysterious btn-blend ml-2';
+        deleteButton.className = 'px-1 rounded shadow-mysterious btn-blend ml-2';
         deleteButton.addEventListener('click', async () => {
             await stateManager.deleteSave(save.id);
             saveOption.remove(); // Remove the save option from the list
