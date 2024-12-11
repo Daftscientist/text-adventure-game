@@ -155,9 +155,9 @@ class StateManager {
                 if (serializedState[key].__type) {
                     const ClassConstructor = this.getClassConstructor(serializedState[key].__type);
                     state[key] = new ClassConstructor(...serializedState[key].__params); // Create an instance with parameters
-                    Object.assign(state[key], this.deserializeState(serializedState[key].__value, state));
+                    Object.assign(state[key], this.deserializeState(serializedState[key].__value, context));
                 } else {
-                    state[key] = this.deserializeState(serializedState[key], state);
+                    state[key] = this.deserializeState(serializedState[key], context);
                 }
             } else {
                 state[key] = serializedState[key];

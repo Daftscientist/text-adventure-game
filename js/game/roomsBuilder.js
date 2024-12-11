@@ -80,6 +80,7 @@ function RoomsBuilder(state) {
     const hammerItem = new Item("hammer", "An old and worn hammer lies still on the floor.", () => {
         return "You pick up the hammer.";
     }, () => {
+        console.log("state hammer", state);
         if (state.alarm.active) {
             return "You can't use the hammer here.";
         }

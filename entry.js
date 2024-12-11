@@ -13,24 +13,62 @@ const submitBtn = document.getElementById('submit-btn');
 const saveBtn = document.getElementById('save-btn');
 const loadBtn = document.getElementById('load-btn');
 
-// Function to append messages to the game output
-function appendMessage(message, warning=false, largeText=false) {
+// Function to append messages to the game output with typing effect
+function appendMessage(message, warning = false, largeText = false, disableTypewriter = false) {
     const lines = message.split('\n');
-    lines.forEach((line) => {
-        const messageElement = document.createElement('p');
-        messageElement.innerHTML = line;
-        if (warning) {
-            messageElement.classList.add('text-yellow-500');
-            messageElement.classList.add('font-bold');
-            messageElement.classList.add('text-lg');
+    let currentLine = 0;
+
+    function typeLine() {
+        if (currentLine < lines.length) {
+            const line = lines[currentLine];
+            const messageElement = document.createElement('p');
+            if (warning) {
+                messageElement.classList.add('text-yellow-500');
+                messageElement.classList.add('font-bold');
+                messageElement.classList.add('text-lg');
+            }
+            if (largeText) {
+                messageElement.classList.add('text-lg');
+                messageElement.classList.add('font-bold');
+            }
+            gameOutput.appendChild(messageElement);
+
+            if (disableTypewriter) {
+                messageElement.innerHTML = line;
+                currentLine++;
+                typeLine();
+            } else {
+                let i = 0;
+                function typeWriter() {
+                    if (i < line.length) {
+                        const char = line.charAt(i);
+                        if (char === '<') {
+                            const tagEnd = line.indexOf('>', i);
+                            if (tagEnd !== -1) {
+                                messageElement.innerHTML += line.substring(i, tagEnd + 1);
+                                i = tagEnd + 1;
+                            } else {
+                                messageElement.innerHTML += char;
+                                i++;
+                            }
+                        } else {
+                            messageElement.innerHTML += char;
+                            i++;
+                        }
+                        setTimeout(typeWriter, 20); // Adjust typing speed here
+                    } else {
+                        currentLine++;
+                        typeLine(); // Move to the next line after the current one is fully typed
+                    }
+                }
+                typeWriter();
+            }
+        } else {
+            gameOutput.scrollTop = gameOutput.scrollHeight; // Scroll to the bottom
         }
-        if (largeText) {
-            messageElement.classList.add('text-lg');
-            messageElement.classList.add('font-bold');
-        }
-        gameOutput.appendChild(messageElement);
-    });
-    gameOutput.scrollTop = gameOutput.scrollHeight; // Scroll to the bottom
+    }
+
+    typeLine();
 }
 
 // Say hello to the user
@@ -38,20 +76,15 @@ appendMessage(`<b>SYSTEM:</b> Welcome to the game!`);
 
 // Append the current room description to the game output
 if (currentRoom) {
-    appendMessage(`<b>GAME:</b> ${currentRoom.getDescription()}`);
-}
-
-// State the available exits
-if (currentRoom) {
     let exits = currentRoom.exits.map((exit) => exit.direction);
-    appendMessage(`<b>GAME:</b> Exits: ${exits.join(', ')}`);
+    appendMessage(`<b>GAME:</b> ${currentRoom.getDescription()}\n<b>GAME:</b> Exits: ${exits.join(', ')}`);
 }
 
 // Event listener for the submit button
 submitBtn.addEventListener('click', () => {
     const userInput = gameInput.value.trim();
     if (userInput) {
-        appendMessage(`<b>USER:</b> ${userInput}`);
+        appendMessage(`<b>USER:</b> ${userInput}`, false, false, true);
         gameInput.value = '';
         // check if alarm has expired
         if (state.alarm.active && Date.now() > state.alarm.endTime) {
