@@ -3,10 +3,7 @@
 class Item {
     constructor(name, description, onTake, onUse, emoji="⁉️") {
         this.name = name;
-        if (description === undefined) {
-            // console log the error
-            console.error("Description is required for an item" + name);
-        }
+
         this.description = description;
         this.onTake = onTake;
         this.usageLocations = [];

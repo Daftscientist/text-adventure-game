@@ -1,5 +1,4 @@
 import Game from "./js/game.js";
-import { stringify, parse } from 'https://cdn.jsdelivr.net/npm/flatted@3.2.5/esm/index.js';
 import StateManager from "./js/stateManager.js";
 
 // Start the game
@@ -30,12 +29,10 @@ function appendMessage(message, warning=false, largeText=false) {
             messageElement.classList.add('font-bold');
         }
         gameOutput.appendChild(messageElement);
-    }
-    );
+    });
     gameOutput.scrollTop = gameOutput.scrollHeight; // Scroll to the bottom
 }
 
-// Say hello to the user
 // Say hello to the user
 appendMessage(`<b>SYSTEM:</b> Welcome to the game!`);
 
@@ -83,8 +80,6 @@ submitBtn.addEventListener('click', () => {
         } else {
             result = command.callback();
         }
-
-        
 
         // Append the result to the game output
         appendMessage(`<b>GAME:</b> ${result}`);
@@ -135,6 +130,7 @@ loadBtn.addEventListener('click', async () => {
         loadButton.className = 'px-1 rounded shadow-mysterious btn-blend ml-2';
         loadButton.addEventListener('click', async () => {
             const loadedState = await stateManager.loadState(save.id);
+            console.log(loadedState)
             Object.assign(state, loadedState); // Update the current state with the loaded state
             loadSaveModal.classList.remove('active');
             loadSaveModal.classList.add('hidden');

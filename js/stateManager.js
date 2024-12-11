@@ -112,7 +112,8 @@ class StateManager {
 
             request.onsuccess = () => {
                 if (request.result) {
-                    resolve(this.deserializeState(request.result.state));
+                    console.log(request.result.state.alarm);
+                    resolve(this.deserializeState(request.result.state, request.result.state));
                 } else {
                     reject(new Error("Save not found"));
                 }
@@ -143,20 +144,20 @@ class StateManager {
         return serialized;
     }
 
-    // Helper method to deserialize state (including functions and nested objects)
-    deserializeState(serializedState) {
+    deserializeState(serializedState, context = {}) {
         const state = {};
         for (const key in serializedState) {
-            if (typeof serializedState[key] === 'string' && 
-                serializedState[key].startsWith('function')) {
-                state[key] = eval(`(${serializedState[key]})`);
+            if (typeof serializedState[key] === 'string' && serializedState[key].startsWith('function')) {
+                state[key] = eval(`(${serializedState[key]})`).bind(context);
+            } else if (typeof serializedState[key] === 'string' && serializedState[key].startsWith('() =>')) {
+                state[key] = eval(serializedState[key]).bind(context);
             } else if (typeof serializedState[key] === 'object' && serializedState[key] !== null) {
                 if (serializedState[key].__type) {
                     const ClassConstructor = this.getClassConstructor(serializedState[key].__type);
                     state[key] = new ClassConstructor(...serializedState[key].__params); // Create an instance with parameters
-                    Object.assign(state[key], this.deserializeState(serializedState[key].__value));
+                    Object.assign(state[key], this.deserializeState(serializedState[key].__value, state));
                 } else {
-                    state[key] = this.deserializeState(serializedState[key]);
+                    state[key] = this.deserializeState(serializedState[key], state);
                 }
             } else {
                 state[key] = serializedState[key];
@@ -216,7 +217,7 @@ class StateManager {
         } else if (instance instanceof Room) {
             return [instance.name, instance.description];
         } else if (instance instanceof Exit) {
-            return [instance.direction, instance.room];
+            return [instance.direction, instance.description];
         } else if (instance instanceof Command) {
             return [instance.identifier, instance.description, instance.callback.toString(), instance.isTwoWordCommand];
         } else if (instance instanceof Parser) {
