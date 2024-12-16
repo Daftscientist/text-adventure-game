@@ -261,3 +261,7 @@ closeInventoryModalBtn.addEventListener('click', () => {
     inventoryModal.classList.remove('active');
     inventoryModal.classList.add('hidden');
 });
+
+document.getElementById('help-btn').addEventListener('click', function() {
+    document.getElementById('help-modal').classList.remove('hidden');
+});

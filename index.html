@@ -99,6 +99,7 @@
         <div class="flex justify-between">
             <button id="submit-btn" class="w-2/8 p-3 rounded shadow-mysterious btn-blend">Submit</button>
             <div class="flex space-x-2">
+                <button id="help-btn" class="w-1/8 px-6 rounded shadow-mysterious btn-blend"><i class="fas fa-question"></i></button>
                 <button id="compass-btn" class="w-1/8 px-6 rounded shadow-mysterious btn-blend"><i class="fas fa-compass"></i></button>
                 <button id="map-btn" class="w-1/8 px-6 rounded shadow-mysterious btn-blend"><i
                         class="fas fa-map"></i></button>
@@ -114,6 +115,20 @@
     </div>
     <script src="entry.js" type="module"></script>
     <!-- Modal -->
+    <div id="help-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-blur rounded-lg shadow-lg p-6 w-3/4 max-w-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-white">Help</h2>
+                <button id="close-help-modal" class="text-gray-500 hover:text-gray-700">&times;</button>
+            </div>
+            <div class="text-white">
+                <p>Welcome to the abandoned mall adventure!</p>
+                <p>Your objective is to enter the abandoned mall by finding and using items around the outside. Once inside, you need to collect more items that will help you navigate through the mall.</p>
+                <p>Eventually, you will need to attempt to enter the elevator, which is protected by security guards. Be prepared to protect yourself and advance past the security to continue your journey.</p>
+                <p>Good luck and stay vigilant!</p>
+            </div>
+        </div>
+    </div>
     <!-- Modal -->
     <div id="map-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-blur rounded-lg shadow-lg p-6 w-3/4 max-w-2xl">
