@@ -33,8 +33,7 @@ function RoomsBuilder(state) {
         if (state.currentRoom.name !== "Room 3") {
             return "You can't use the crowbar here.";
         }
-        // add exit to room 9 from current room
-        state.currentRoom.addExit(new Exit("north", "Room 9"));
+        state.elevatorDoorOpen = true;
         return "You use the crowbar to open the elevator door.";
     }, "🔧");
     crowbarItem.addUsageLocation("Room 3");
@@ -134,10 +133,13 @@ function RoomsBuilder(state) {
         `, () => {
         return "You pick up the key.";
     }, () => {
-        // add an exit to the elevator room
+        if (state.currentRoom.name !== "Room 3") {
+            return "You can't use the key here.";
+        }
+        state.elevatorDoorOpen = true;
         return "You use the key to unlock the elevator door.";
     }, "🔑");
-    elevatorKeyItem.addUsageLocation("Room 7");
+    elevatorKeyItem.addUsageLocation("Room 3");
 
     room6.addItem(elevatorKeyItem);
 
@@ -147,7 +149,6 @@ function RoomsBuilder(state) {
             The walls are made of thick concrete or steel panels, adorned only by a series of surveillance monitors and a few control panels that oversee the elevator’s operation and security systems within the mall. 
         `
     );
-    room7.addExit(new Exit("north", "Room 3"));
     room7.addExit(new Exit("south", "Room 11"));
     room7.addExit(new Exit("west", "Room 6"));
 
@@ -183,6 +184,25 @@ function RoomsBuilder(state) {
     );
     room10.addExit(new Exit("north", "Room 6"));
     room10.addExit(new Exit("south", "Room 14"));
+
+    // gun that can be used in 7 and 2 to kill secutiry
+    const room10ITem = new Item("gun", "A gun lies on the floor, its metal surface cold and heavy in your hand. It looks like it could be used to defend yourself.", () => {
+        return "You pick up the gun";
+    }, () => {
+        if (state.currentRoom.name !== "Room 7" && state.currentRoom.name !== "Room 2") {
+            return "You can't use the gun here.";
+        }
+        // adds access to room 3 from from room 2 and 7
+        if (state.currentRoom.name === "Room 2") {
+            state.currentRoom.addExit(new Exit("east", "Room 3"));
+        }
+        if (state.currentRoom.name === "Room 7") {
+            state.currentRoom.addExit(new Exit("north", "Room 3"));
+        }
+        return "You use the gun to kill the security guard.";
+    }, "🔫");
+    room10ITem.addUsageLocation("Room 7");
+    room10ITem.addUsageLocation("Room 2");
 
     const room11 = new Room("Room 11",
         `

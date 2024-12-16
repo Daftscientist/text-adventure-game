@@ -55,7 +55,7 @@ function appendMessage(message, warning = false, largeText = false, disableTypew
                             messageElement.innerHTML += char;
                             i++;
                         }
-                        setTimeout(typeWriter, 20); // Adjust typing speed here
+                        setTimeout(typeWriter, 15); // Adjust typing speed here
                     } else {
                         currentLine++;
                         typeLine(); // Move to the next line after the current one is fully typed

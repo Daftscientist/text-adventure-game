@@ -4,6 +4,7 @@ import RoomsBuilder from './game/roomsBuilder.js';
 function Game() {
     let state = {
         inventory: [],
+        elevatorDoorOpen: false,
         currentRoom: null,
         alarm: {
             active: false,
