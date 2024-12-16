@@ -90,7 +90,7 @@ submitBtn.addEventListener('click', () => {
         // check if alarm has expired
         if (state.elevatorDoorOpen === true) {
             appendMessage(`<b>GAME:</b> The elevator door is open.`, false, true);
-            appendMessage(`<b>GAME:</b> Game over! You won the game by successfully disabling the alarm and killing the guards!`, false, true);
+            appendMessage(`<b>GAME:</b> Game over! You won the game by successfully disabling the alarm, killing the guards and entering the elevator!`, false, true);
             state.alarm.active = false;
             state.elevatorDoorOpen = false;
             gameInput.disabled = true;
