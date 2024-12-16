@@ -47,6 +47,7 @@ function RoomsBuilder(state) {
             The atmosphere is one of constant vigilance, as the team works to maintain surveillance on the illicit activities taking place inside the unfinished mall. The sense of unease is palpable, as they know that any mistake could lead to detection and a swift response from law enforcement.
             This high-tech, strategic hub is designed to protect the elevator system that connects the different levels of this criminal enterprise, ensuring that the illicit operations continue without interruption.
             It seems that the security measures are particularly focused on protecting the elevator, which is a crucial link in the operation.
+            A security guard stands nearby, eyeing you suspiciously. You have to defeat the guard to pass.
         `
     );
     room2.addExit(new Exit("west", "Room 1"));
@@ -54,11 +55,9 @@ function RoomsBuilder(state) {
 
     const room3 = new Room("Room 3",
         `
-            You find yourself outside the same eerie mall, but from a different angle. The skeletal structure of the building looms even more ominously here, with steel beams jutting out at odd angles, casting long, twisted shadows on the ground.
-            The boarded-up windows are just as haphazardly covered, but from this side, you can see where some of the boards have started to come loose, revealing dark, empty spaces behind them.
-            The air is thick with the smell of decay and something metallic, almost like rust. The ground is littered with debris—broken glass, scraps of metal, and pieces of wood.
-            Among the rubble, you spot a hammer lying on the ground. It looks old and worn, but still sturdy. It might come in handy later.
-            Right ahead of you is a lift. The lift's exterior is a patchwork of rusted metal panels and peeling paint, with exposed wiring hanging loosely. The shaft is dimly lit, casting long shadows across the unfinished building. Graffiti and faded warning signs mark the walls, while the faint scent of oil and damp concrete fills the air. The lift ascends slowly, creaking with every movement, as if reluctant to carry you higher into the shadowed, hidden world above.
+           You are standing outside an old, rusted elevator. The metal doors are slightly ajar, revealing a dark, narrow gap. The elevator looks like it hasn't been used in years, with cobwebs and dust covering its surface.
+            There is a key slot next to the doors, suggesting that it might still be operational if you had the right key. The edges of the doors are worn and bent, indicating that they could potentially be pried open with the right tool.
+            The atmosphere is tense, as if the elevator holds secrets of the past, waiting to be uncovered. The faint sound of machinery can be heard from within, hinting that the elevator might still have some life left in it.
         `
     );
     // end of game once you go into lift here
@@ -141,12 +140,15 @@ function RoomsBuilder(state) {
     }, "🔑");
     elevatorKeyItem.addUsageLocation("Room 3");
 
+
     room6.addItem(elevatorKeyItem);
 
     const room7 = new Room("Room 7",
         `
-            The room is tucked away in a corner of the unfinished building, at the base of the elevator shaft, and is far enough from prying eyes to avoid detection by those involved in the illicit activities above.
-            The walls are made of thick concrete or steel panels, adorned only by a series of surveillance monitors and a few control panels that oversee the elevator’s operation and security systems within the mall. 
+You are standing outside an old, rusted elevator. The metal doors are slightly ajar, revealing a dark, narrow gap. The elevator looks like it hasn't been used in years, with cobwebs and dust covering its surface.
+            There is a key slot next to the doors, suggesting that it might still be operational if you had the right key. The edges of the doors are worn and bent, indicating that they could potentially be pried open with the right tool.
+            The atmosphere is tense, as if the elevator holds secrets of the past, waiting to be uncovered. The faint sound of machinery can be heard from within, hinting that the elevator might still have some life left in it.
+            A security guard stands nearby, eyeing you suspiciously. You must defeat the guard to pass.
         `
     );
     room7.addExit(new Exit("south", "Room 11"));
@@ -203,6 +205,8 @@ function RoomsBuilder(state) {
     }, "🔫");
     room10ITem.addUsageLocation("Room 7");
     room10ITem.addUsageLocation("Room 2");
+
+    room10.addItem(room10ITem);
 
     const room11 = new Room("Room 11",
         `
@@ -268,8 +272,9 @@ function RoomsBuilder(state) {
         `
     );
     // west and east
-    room14.addExit(new Exit("south", "Room 13"));
-    room14.addExit(new Exit("north", "Room 15"));
+    room14.addExit(new Exit("west", "Room 13"));
+    room14.addExit(new Exit("east", "Room 15"));
+
 
     const room15 = new Room("Room 15",
         `
@@ -279,7 +284,7 @@ function RoomsBuilder(state) {
             You wonder what secrets lie behind the boarded-up window.
         `
     );
-    room15.addExit(new Exit("south", "Room 14"));
+    room15.addExit(new Exit("west", "Room 14"));
     
     // Add rock that can be used to break window
     const rockItem = new Item("rock", "A small rock lies on the ground, its surface smooth and worn. It looks like it could be used to break something.", () => {
@@ -290,7 +295,7 @@ function RoomsBuilder(state) {
         }
         // Activate alarm and give user 5 minutes to disarm
         state.alarm.active = true;
-        state.alarm.endTime = Math.floor(Date.now() / 1000) + 300;
+        state.alarm.endTime = Date.now() + 300000; // 300000 milliseconds = 5 minutes
         // Add exit to room 9 from current room
         state.currentRoom.addExit(new Exit("north", "Room 9"));
         return "You use the rock to break the window.";

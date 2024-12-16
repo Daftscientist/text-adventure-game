@@ -40,6 +40,7 @@ function appendMessage(message, warning = false, largeText = false, disableTypew
             } else {
                 let i = 0;
                 function typeWriter() {
+                    gameOutput.scrollTop = gameOutput.scrollHeight; // Scroll to the bottom
                     if (i < line.length) {
                         const char = line.charAt(i);
                         if (char === '<') {
@@ -87,6 +88,15 @@ submitBtn.addEventListener('click', () => {
         appendMessage(`<b>USER:</b> ${userInput}`, false, false, true);
         gameInput.value = '';
         // check if alarm has expired
+        if (state.elevatorDoorOpen === true) {
+            appendMessage(`<b>GAME:</b> The elevator door is open.`, false, true);
+            appendMessage(`<b>GAME:</b> Game over! You won the game by successfully disabling the alarm and killing the guards!`, false, true);
+            state.alarm.active = false;
+            state.elevatorDoorOpen = false;
+            gameInput.disabled = true;
+            return;
+        }
+
         if (state.alarm.active && Date.now() > state.alarm.endTime) {
             appendMessage(`<b>GAME:</b> The alarm has expired.`, true);
             appendMessage(`<b>GAME:</b> Game over!`, true);
